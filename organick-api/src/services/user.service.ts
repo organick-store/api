@@ -23,9 +23,7 @@ export class UserService {
   async register(
     name: string,
     email: string,
-    password: string,
-    birthdate: string,
-    about: string
+    password: string
   ): Promise<AuthResponseDTO> {
     const candidateEmail = await this.userReposiroty.findOneBy({ email });
     if (candidateEmail)
@@ -34,17 +32,14 @@ export class UserService {
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRATION_TIME
     });
-    const birthdateNormalized = new Date(birthdate);
     const passwordHash = await bcrypt.hash(password, 3);
 
     const user = new User();
     user.name = name;
     user.email = email;
     user.password = passwordHash;
-    user.birthdate = birthdateNormalized;
-    user.about = about;
 
-    await AppDataSource.manager.save(user);
+    await this.userReposiroty.save(user);
     return { status: 'success', token: token };
   }
 
@@ -114,14 +109,11 @@ export class UserService {
       if (candidateEmail) return { status: 'Error', message: 'User already exists' };
 
       const passwordHash = await bcrypt.hash(user.password, 3);
-      const birthdateNormalized = new Date(user.birthdate);
 
       const newUser = new User();
       newUser.name = user.name;
       newUser.email = user.email;
       newUser.password = passwordHash;
-      newUser.birthdate = birthdateNormalized;
-      newUser.about = user.about;
 
       await this.userReposiroty.save(newUser);
       return { status: 'Success', message: 'User has been created' };

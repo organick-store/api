@@ -24,22 +24,4 @@ export class UserDTO {
     type: String
   })
   password?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    description: 'User birthdate',
-    type: String,
-    nullable: true
-  })
-  birthdate?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    description: 'User about',
-    type: String,
-    nullable: true
-  })
-  about?: string;
 }
