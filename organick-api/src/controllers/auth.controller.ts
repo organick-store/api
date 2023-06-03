@@ -17,6 +17,7 @@ import { SigninDTO } from '../DTOs/signin.dto';
 import { CurrentUserDTO } from '../DTOs/currentUser.dto';
 import { EmailDTO } from '../DTOs/email.dto';
 import { PasswordDTO } from '../DTOs/password.dto';
+import { createTemporearyPassword } from '../utils/tmpPassword.util';
 
 @Controller()
 @ApiTags('User authorisation')
@@ -73,7 +74,9 @@ export class AuthController {
   @ApiBody({ type: EmailDTO })
   async forgotPassword(@Body() body: EmailDTO, @Response() res) {
     try {
-      const forgotPassword = await this.mailService.sendEmail({ to: body.email });
+      const tmpPassword = createTemporearyPassword();
+      const forgotPassword = await this.mailService.sendEmail({ to: body.email }, tmpPassword);
+      await this.userService.setTemporaryPassword(body.email, tmpPassword);
       if (forgotPassword.status === 'Success') res.status(200).send(forgotPassword);
       else res.status(404).send(forgotPassword);
     } catch (error) {

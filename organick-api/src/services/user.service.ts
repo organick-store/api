@@ -11,13 +11,15 @@ import { User } from '../entities/user.entity';
 import { verifyToken, decodeToken } from '../utils/token.util';
 import { AuthResponseDTO } from '../DTOs/authResponse.dto';
 import { UserDTO } from '../DTOs/user.dto';
+import { TemporaryPassword } from '../entities/temporaryPasswords.entity';
 
 dotenv.config();
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userReposiroty: Repository<User>
+    @InjectRepository(User) private readonly userReposiroty: Repository<User>,
+    @InjectRepository(TemporaryPassword) private readonly temporaryPasswordRepository: Repository<TemporaryPassword>
   ) {}
 
   async register(
@@ -79,6 +81,23 @@ export class UserService {
       
       await this.userReposiroty.update({ email }, { password: passwordHash });
       return { status: 'Success', message: 'Password has been changed' };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async setTemporaryPassword(email: string, temporaryPassword: string): Promise<AuthResponseDTO> {
+    try {
+      const user = await this.userReposiroty.findOneBy({ email });
+      if (!user) return { status: 'Error', message: 'User not found' };
+
+      const passwordHash = await bcrypt.hash(temporaryPassword, 3);
+
+      const tmpPassword = new TemporaryPassword();
+      tmpPassword.password = passwordHash;
+      tmpPassword.user = user;
+
+      await this.temporaryPasswordRepository.save(tmpPassword);
     } catch (error) {
       console.log(error);
     }

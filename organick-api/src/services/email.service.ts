@@ -16,18 +16,14 @@ export class EmailService {
     @InjectRepository(User) private readonly userReposiroty: Repository<User>
   ) {}
 
-  async sendEmail({ to }: EmailOptionsData): Promise<AuthResponseDTO> {
+  async sendEmail({ to }: EmailOptionsData, tmpPassword: string): Promise<AuthResponseDTO> {
     try {
       const user = await this.userReposiroty.findOneBy({ email: to });
       if (!user) 
         return { status: 'ErrNotFound', message: `User with email: ${to} not found` };
 
-      const uniqueToken = jwt.sign({ to }, process.env.JWT_SECRET, {
-        expiresIn: '1h'
-      });
-
-      const link = process.env.RESET_PASSWD_URL + uniqueToken;
-      const html = mailTemplate.replace('LINK', link);
+      const newPassword = 'http://localhost:3001/' //process.env.RESET_PASSWD_URL + uniqueToken;
+      const html = mailTemplate.replace('TMP_PASSWD', newPassword);
 
       await this.mailerService.sendMail({
         to,

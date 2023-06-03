@@ -8,6 +8,7 @@ import { User } from './entities/user.entity';
 import { EmailService } from './services/email.service';
 
 import * as dotenv from 'dotenv';
+import { TemporaryPassword } from './entities/temporaryPasswords.entity';
 dotenv.config();
 
 @Module({
@@ -20,9 +21,9 @@ dotenv.config();
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       synchronize: true,
-      entities: [User]
+      entities: [User, TemporaryPassword]
     }), 
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, TemporaryPassword]),
     MailerModule.forRoot({
       transport: {
         host: process.env.SMTP_HOST,
