@@ -1,4 +1,4 @@
-export const mailTemplate = `<!DOCTYPE html>
+export const temporaryPasswordTemplate = `<!DOCTYPE html>
 <html lang="en">
 <body>
   <h2>Don't resend this email to anyone</h2>

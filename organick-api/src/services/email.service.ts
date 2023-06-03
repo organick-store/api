@@ -2,10 +2,10 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as jwt from 'jsonwebtoken';
 
 import { EmailOptionsData } from '../datas/email.data';
-import { mailTemplate } from '../templates/mail.template';
+import { temporaryPasswordTemplate } from '../templates/tamporaryPassword.template';
+import { confirmationTemplate } from '../templates/confirmation.template';
 import { AuthResponseDTO } from '../DTOs/authResponse.dto';
 import { User } from '../entities/user.entity';
 
@@ -16,18 +16,32 @@ export class EmailService {
     @InjectRepository(User) private readonly userReposiroty: Repository<User>
   ) {}
 
-  async sendEmail({ to }: EmailOptionsData, tmpPassword: string): Promise<AuthResponseDTO> {
+  async sendTemporaryPassword({ to }: EmailOptionsData, tmpPassword: string): Promise<AuthResponseDTO> {
     try {
       const user = await this.userReposiroty.findOneBy({ email: to });
       if (!user) 
         return { status: 'ErrNotFound', message: `User with email: ${to} not found` };
 
-      const newPassword = 'http://localhost:3001/' //process.env.RESET_PASSWD_URL + uniqueToken;
-      const html = mailTemplate.replace('TMP_PASSWD', newPassword);
+      const html = temporaryPasswordTemplate.replace('TMP_PASSWD', tmpPassword);
 
       await this.mailerService.sendMail({
         to,
         subject: 'Access recovery',
+        html
+      });
+      return { status: 'Success', message: `Email has been sent to: ${to}` };
+    } catch (error) {
+      return { status: 'Error', message: error.message };
+    }
+  }
+
+  async sendConfirmationEmail({ to }: EmailOptionsData, token: string): Promise<AuthResponseDTO> {
+    try {
+      const html = confirmationTemplate.replace('LINK', process.env.CONFIRM_EMAIL_URL + token);
+
+      await this.mailerService.sendMail({
+        to,
+        subject: 'Confirm your email',
         html
       });
       return { status: 'Success', message: `Email has been sent to: ${to}` };

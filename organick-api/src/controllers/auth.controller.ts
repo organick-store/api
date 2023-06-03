@@ -2,9 +2,9 @@ import {
   Controller,
   Post,
   Body,
-  Get,
   Response,
-  Request
+  Put,
+  Param
 } from '@nestjs/common';
 import { ApiHeader, ApiResponse, ApiTags, ApiCreatedResponse, ApiBody } from '@nestjs/swagger';
 
@@ -42,7 +42,10 @@ export class AuthController {
         password
       );
       if (!!registration.message) res.status(202).send(registration);
-      else res.status(201).send(registration);
+      else {
+        await this.mailService.sendConfirmationEmail({ to: email }, registration.token);
+        res.status(201).send(registration);
+      }
     } catch (error) {
       res.status(500).send({ status: 'Server error', message: error.message });
     }
@@ -67,6 +70,21 @@ export class AuthController {
     }
   }
 
+  @Put('/confirm-email/:token')
+  @ApiResponse({ status: 200, description: 'Email has been confirmed'})
+  @ApiResponse({ status: 404, description: 'Error. User not found'})
+  @ApiResponse({ status: 500, description: 'Internal server error'})
+  @ApiBody({ type: EmailDTO })
+  async confirmEmail(@Param('token') token: string, @Response() res) {
+    try {
+      const confirmEmail = await this.userService.confirmEmail(token);
+      if (confirmEmail.message === 'Error') res.status(404).send(confirmEmail);
+      else res.status(200).send(confirmEmail);
+    } catch (error) {
+      res.status(500).send({ status: 'Server error', message: error.message });
+    }
+  }
+
   @Post('/forgot-password')
   @ApiResponse({ status: 200, description: 'Email has been sent. Password has been updated'})
   @ApiResponse({ status: 404, description: 'Error. User not found'})
@@ -75,7 +93,7 @@ export class AuthController {
   async forgotPassword(@Body() body: EmailDTO, @Response() res) {
     try {
       const tmpPassword = createTemporearyPassword();
-      const forgotPassword = await this.mailService.sendEmail({ to: body.email }, tmpPassword);
+      const forgotPassword = await this.mailService.sendTemporaryPassword({ to: body.email }, tmpPassword);
       await this.userService.setTemporaryPassword(body.email, tmpPassword);
       if (forgotPassword.status === 'Success') res.status(200).send(forgotPassword);
       else res.status(404).send(forgotPassword);

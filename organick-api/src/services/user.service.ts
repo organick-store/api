@@ -6,7 +6,6 @@ import * as dotenv from 'dotenv';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
-import { AppDataSource } from '../data-source';
 import { User } from '../entities/user.entity';
 import { verifyToken, decodeToken } from '../utils/token.util';
 import { AuthResponseDTO } from '../DTOs/authResponse.dto';
@@ -51,7 +50,12 @@ export class UserService {
       if (!user) return { status: 'error', message: 'User not found' };
 
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
-      if (!isPasswordCorrect)
+
+      const tempPassword = await this.temporaryPasswordRepository.findOneBy({ user });
+
+      const isTempPasswordCorrect = await bcrypt.compare(password, tempPassword?.password);
+
+      if (!isPasswordCorrect && !isTempPasswordCorrect)
         return { status: 'error', message: 'Wrong password' };
 
       const token = jwt.sign({ email }, process.env.JWT_SECRET, {
@@ -97,7 +101,25 @@ export class UserService {
       tmpPassword.password = passwordHash;
       tmpPassword.user = user;
 
-      await this.temporaryPasswordRepository.save(tmpPassword);
+      console.log(temporaryPassword);
+
+      const isTemporaryPasswordExist = await this.temporaryPasswordRepository.findOneBy({ user });
+      if (isTemporaryPasswordExist) await this.temporaryPasswordRepository.update({ user }, tmpPassword);
+      else await this.temporaryPasswordRepository.save(tmpPassword);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async confirmEmail(token: string): Promise<AuthResponseDTO> {
+    try {
+      const isTokenValid = await verifyToken(token).catch((err) => !!!err);
+      if (!isTokenValid) return { status: 'Error', message: 'Token expired' };
+
+      const email = await decodeToken(token).then((payload) => payload.email);
+      console.log(email)
+      await this.userReposiroty.update({ email }, { isVerified: true });
+      return { status: 'Success', message: 'Email has been confirmed' };
     } catch (error) {
       console.log(error);
     }
