@@ -6,7 +6,7 @@ import {
   Put,
   Param
 } from '@nestjs/common';
-import { ApiHeader, ApiResponse, ApiTags, ApiCreatedResponse, ApiBody } from '@nestjs/swagger';
+import { ApiResponse, ApiTags, ApiCreatedResponse, ApiBody, ApiParam } from '@nestjs/swagger';
 
 import { UserService } from '../services/user.service';
 import { EmailService } from '../services/email.service';
@@ -14,7 +14,6 @@ import { EmailService } from '../services/email.service';
 import { UserDTO } from '../DTOs/user.dto';
 import { AuthResponseDTO } from '../DTOs/authResponse.dto';
 import { SigninDTO } from '../DTOs/signin.dto';
-import { CurrentUserDTO } from '../DTOs/currentUser.dto';
 import { EmailDTO } from '../DTOs/email.dto';
 import { PasswordDTO } from '../DTOs/password.dto';
 import { createTemporearyPassword } from '../utils/tmpPassword.util';
@@ -74,7 +73,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Email has been confirmed'})
   @ApiResponse({ status: 404, description: 'Error. User not found'})
   @ApiResponse({ status: 500, description: 'Internal server error'})
-  @ApiBody({ type: EmailDTO })
+  @ApiParam({ name: 'token', type: String })
   async confirmEmail(@Param('token') token: string, @Response() res) {
     try {
       const confirmEmail = await this.userService.confirmEmail(token);
@@ -108,7 +107,7 @@ export class AuthController {
   @ApiBody({ type: PasswordDTO })
   async resetPassword(@Body() body: PasswordDTO, @Response() res) {
     try {
-      const resetPassword = await this.userService.resetPassword(body.password, body.token);
+      const resetPassword = await this.userService.resetPassword(body.oldPassword, body.newPassword, body.token);
       if (resetPassword.status === 'Success') res.status(200).send(resetPassword);
       else res.status(404).send(resetPassword);
     } catch (error) {

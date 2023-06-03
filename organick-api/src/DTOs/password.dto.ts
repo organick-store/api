@@ -8,7 +8,15 @@ export class PasswordDTO {
     description: 'New password',
     type: String
   })
-  password: string;
+  oldPassword: string;
+
+  @MinLength(8)
+  @MaxLength(20)
+  @ApiProperty({
+    description: 'New password',
+    type: String
+  })
+  newPassword: string;
 
   @ApiProperty({
     description: 'Unique token',

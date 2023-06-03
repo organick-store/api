@@ -53,7 +53,9 @@ export class UserService {
 
       const tempPassword = await this.temporaryPasswordRepository.findOneBy({ user });
 
-      const isTempPasswordCorrect = await bcrypt.compare(password, tempPassword?.password);
+      let isTempPasswordCorrect: boolean = true;
+      if (!!tempPassword?.password) isTempPasswordCorrect = await bcrypt.compare(password, tempPassword.password);
+
 
       if (!isPasswordCorrect && !isTempPasswordCorrect)
         return { status: 'error', message: 'Wrong password' };
@@ -68,7 +70,7 @@ export class UserService {
     }
   }
 
-  async resetPassword (newPassword: string, token: string): Promise<AuthResponseDTO> {
+  async resetPassword (oldPassword: string, newPassword: string, token: string): Promise<AuthResponseDTO> {
     try {
       const isTokenValid = await verifyToken(token).catch((err) => !!!err);
       if (!isTokenValid)
@@ -77,13 +79,21 @@ export class UserService {
           message: 'Token expired'
         };
 
-      const email = await decodeToken(token).then((payload) => payload.to);
-      const passwordHash = await bcrypt.hash(newPassword, 3);
-
-      const user = this.userReposiroty.findOneBy({ email });
+      const email = await decodeToken(token).then((payload) => payload.email);
+      const user = await this.userReposiroty.findOneBy({ email });
       if (!user) return { status: 'Error', message: 'User not found' };
       
-      await this.userReposiroty.update({ email }, { password: passwordHash });
+      const isOldPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+
+      const tempPassword = await this.temporaryPasswordRepository.findOneBy({ user });
+      
+      let isTempPasswordCorrect: boolean = true;
+      if (!!tempPassword?.password) isTempPasswordCorrect = await bcrypt.compare(oldPassword, tempPassword?.password);
+      
+      if (!isOldPasswordCorrect && !isTempPasswordCorrect) return { status: 'error', message: 'Wrong password' };
+
+      const newPasswordHash = await bcrypt.hash(newPassword, 3);
+      await this.userReposiroty.update({ email }, { password: newPasswordHash });
       return { status: 'Success', message: 'Password has been changed' };
     } catch (error) {
       console.log(error);
@@ -117,7 +127,6 @@ export class UserService {
       if (!isTokenValid) return { status: 'Error', message: 'Token expired' };
 
       const email = await decodeToken(token).then((payload) => payload.email);
-      console.log(email)
       await this.userReposiroty.update({ email }, { isVerified: true });
       return { status: 'Success', message: 'Email has been confirmed' };
     } catch (error) {
