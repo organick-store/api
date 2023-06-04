@@ -31,7 +31,7 @@ export class UserService {
       return { status: 'error', message: 'User already exists' };
 
     const token = jwt.sign({ email }, process.env.JWT_SECRET || "test_secret_key", {
-      expiresIn: process.env.JWT_EXPIRATION_TIME
+      expiresIn: process.env.JWT_EXPIRATION_TIME || "30h"
     });
     const passwordHash = await bcrypt.hash(password, 3);
 
