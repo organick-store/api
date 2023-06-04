@@ -50,12 +50,13 @@ export class UserService {
       if (!user) return { status: 'error', message: 'User not found' };
 
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
+      
       const tempPassword = await this.temporaryPasswordRepository.findOneBy({ user });
-
-      let isTempPasswordCorrect: boolean = true;
+      
+      let isTempPasswordCorrect: boolean = false;
       if (!!tempPassword?.password) isTempPasswordCorrect = await bcrypt.compare(password, tempPassword.password);
-
+      
+      console.log(password, user.password, isPasswordCorrect, isTempPasswordCorrect)
 
       if (!isPasswordCorrect && !isTempPasswordCorrect)
         return { status: 'error', message: 'Wrong password' };
