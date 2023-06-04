@@ -30,7 +30,7 @@ export class UserService {
     if (candidateEmail)
       return { status: 'error', message: 'User already exists' };
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ email }, process.env.JWT_SECRET || "test_secret_key", {
       expiresIn: process.env.JWT_EXPIRATION_TIME
     });
     const passwordHash = await bcrypt.hash(password, 3);
