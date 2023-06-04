@@ -41,7 +41,7 @@ export class UserService {
     user.password = passwordHash;
 
     await this.userReposiroty.save(user);
-    return { status: 'success', token: token };
+    return { status: 'Success', token, name: user.name, email: user.email };
   }
 
   async signin(email: string, password: string): Promise<AuthResponseDTO> {
@@ -65,7 +65,7 @@ export class UserService {
         expiresIn: process.env.JWT_EXPIRATION_TIME
       });
 
-      return { status: 'success', token };
+      return { status: 'Success', token, name: user.name, email: user.email };
     } catch (error) {
       console.log(error);
     }

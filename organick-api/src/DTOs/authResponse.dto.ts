@@ -26,4 +26,22 @@ export class AuthResponseDTO {
     nullable: true
   })
   token?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'User name',
+    type: String,
+    nullable: true
+  })
+  name?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'User email',
+    type: String,
+    nullable: true
+  })
+  email?: string;
 }
