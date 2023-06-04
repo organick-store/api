@@ -40,10 +40,10 @@ export class AuthController {
         email,
         password
       );
-      if (!!registration.message) res.status(202).send(registration);
-      else {
+      if (!!registration.message) return await res.status(202).send(registration);
+      else {  
         await this.mailService.sendConfirmationEmail({ to: email }, registration.token);
-        res.status(201).send(registration);
+        return await res.status(201).send(registration);
       }
     } catch (error) {
       res.status(500).send({ status: 'Server error', message: error.message });

@@ -38,14 +38,15 @@ export class EmailService {
   async sendConfirmationEmail({ to }: EmailOptionsData, token: string): Promise<AuthResponseDTO> {
     try {
       const html = confirmationTemplate.replace('LINK', process.env.CONFIRM_EMAIL_URL + token);
-
       await this.mailerService.sendMail({
         to,
         subject: 'Confirm your email',
         html
-      });
+      }).catch((err) => console.log(err));
+
       return { status: 'Success', message: `Email has been sent to: ${to}` };
     } catch (error) {
+      console.log(error);
       return { status: 'Error', message: error.message };
     }
   }
