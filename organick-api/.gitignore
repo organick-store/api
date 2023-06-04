@@ -6,4 +6,3 @@ dist/
 tmp/
 temp/
 .env
-package-lock.json
