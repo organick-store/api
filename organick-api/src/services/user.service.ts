@@ -135,6 +135,22 @@ export class UserService {
     }
   }
 
+  async refresh(token: string) {
+    try {
+      const isTokenValid = await verifyToken(token).catch((err) => !!!err);
+      if (!isTokenValid) return { status: 'Error', message: 'Token expired' };
+
+      const email = await decodeToken(token).then((payload) => payload.email);
+      const user = await this.userReposiroty.findOneBy({ email });
+      if (!user) return { status: 'Error', message: 'User not found' };
+
+      return { status: 'Success', name: user.name, email: user.email };
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async getAllUsers(): Promise<{ status: string, message?: string, result?: User[]}> {
     try {
       const users = await this.userReposiroty.find();

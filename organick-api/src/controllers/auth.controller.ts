@@ -114,4 +114,19 @@ export class AuthController {
       res.status(500).send({ status: 'Server error', message: error.message });
     }
   }
+
+  @Put('/refresh/:token')
+  @ApiResponse({ status: 200, description: 'Token has been updated'})
+  @ApiResponse({ status: 404, description: 'Error. User not found'})
+  @ApiResponse({ status: 500, description: 'Internal server error'})
+  @ApiParam({ name: 'token', type: String })
+  async refresh(@Param('token') token: string, @Response() res) {
+    try {
+      const refresh = await this.userService.refresh(token);
+      if (refresh.message === 'Error') res.status(404).send(refresh);
+      else res.status(200).send(refresh);
+    } catch (error) {
+      res.status(500).send({ status: 'Server error', message: error.message });
+    }
+  }
 }
