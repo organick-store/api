@@ -36,7 +36,9 @@ export class ProductService {
     try {
       const product = await this.productRepository.findOneBy({ name: productInfo.name });
       if (!product) return { status: 'Error', message: 'Product not found' };
-      return await this.productRepository.update(product, productInfo);
+
+      const updated = await this.productRepository.update(product, productInfo);
+      return { status: 'Success', updated }
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +48,9 @@ export class ProductService {
     try {
       const product = await this.productRepository.findOneBy({ name: productName });
       if (!product) return { status: 'Error', message: 'Product not found' };
-      return await this.productRepository.delete(product);
+
+      const deleted =  await this.productRepository.delete(product);
+      return { status: 'Success', deleted }
     } catch (error) {
       console.log(error);
     }

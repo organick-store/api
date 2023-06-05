@@ -40,7 +40,8 @@ export class ProductController {
   async updateProduct(@Res() res, @Body() productInfo: ProductDTO) {
     try {
       const product = await this.productService.updateProduct(productInfo);
-      res.status(200).json({ status: 'Success', product });
+      if (product.status === 'Error') return res.status(500).json(product);
+      res.status(200).json(product);
     } catch (error) {
       res.status(500).json({ status: 'Error', message: error.message });
     }
@@ -53,7 +54,8 @@ export class ProductController {
   async deleteProduct(@Res() res, @Body() productName: string) {
     try {
       const product = await this.productService.deleteProduct(productName);
-      res.status(200).json({ status: 'Success', product });
+      if (product.status === 'Error') return res.status(500).json(product);
+      res.status(200).json(product);
     } catch (error) {
       res.status(500).json({ status: 'Error', message: error.message });
     }
