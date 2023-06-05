@@ -56,8 +56,6 @@ export class UserService {
       let isTempPasswordCorrect: boolean = false;
       if (!!tempPassword?.password) isTempPasswordCorrect = await bcrypt.compare(password, tempPassword.password);
       
-      console.log(password, user.password, isPasswordCorrect, isTempPasswordCorrect)
-
       if (!isPasswordCorrect && !isTempPasswordCorrect)
         return { status: 'Error', message: 'Wrong password' };
 
@@ -111,8 +109,6 @@ export class UserService {
       const tmpPassword = new TemporaryPassword();
       tmpPassword.password = passwordHash;
       tmpPassword.user = user;
-
-      console.log(temporaryPassword);
 
       const isTemporaryPasswordExist = await this.temporaryPasswordRepository.findOneBy({ user });
       if (isTemporaryPasswordExist) await this.temporaryPasswordRepository.update({ user }, tmpPassword);
