@@ -9,6 +9,8 @@ import { EmailService } from './services/email.service';
 
 import * as dotenv from 'dotenv';
 import { TemporaryPassword } from './entities/temporaryPasswords.entity';
+import { Product } from './entities/product.entity';
+import { ProductService } from './services/product.service';
 dotenv.config();
 
 @Module({
@@ -21,9 +23,9 @@ dotenv.config();
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       synchronize: true,
-      entities: [User, TemporaryPassword]
+      entities: [User, TemporaryPassword, Product]
     }), 
-    TypeOrmModule.forFeature([User, TemporaryPassword]),
+    TypeOrmModule.forFeature([User, TemporaryPassword, Product]),
     MailerModule.forRoot({
       transport: {
         host: process.env.SMTP_HOST,
@@ -36,6 +38,6 @@ dotenv.config();
     })
   ],
   controllers: [AuthController],
-  providers: [UserService, EmailService]
+  providers: [UserService, EmailService, ProductService]
 })
 export class AppModule {}
