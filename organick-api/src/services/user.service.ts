@@ -28,7 +28,7 @@ export class UserService {
   ): Promise<AuthResponseDTO> {
     const candidateEmail = await this.userReposiroty.findOneBy({ email });
     if (candidateEmail)
-      return { status: 'error', message: 'User already exists' };
+      return { status: 'Error', message: 'User already exists' };
 
     const token = jwt.sign({ email }, process.env.JWT_SECRET || "test_secret_key", {
       expiresIn: process.env.JWT_EXPIRATION_TIME || "30h"
@@ -47,7 +47,7 @@ export class UserService {
   async signin(email: string, password: string): Promise<AuthResponseDTO> {
     try {
       const user = await this.userReposiroty.findOneBy({ email });
-      if (!user) return { status: 'error', message: 'User not found' };
+      if (!user) return { status: 'Error', message: 'User not found' };
 
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
       
@@ -59,7 +59,7 @@ export class UserService {
       console.log(password, user.password, isPasswordCorrect, isTempPasswordCorrect)
 
       if (!isPasswordCorrect && !isTempPasswordCorrect)
-        return { status: 'error', message: 'Wrong password' };
+        return { status: 'Error', message: 'Wrong password' };
 
       const token = jwt.sign({ email }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRATION_TIME
@@ -203,8 +203,8 @@ export class UserService {
   async deleteUser(email: string): Promise<AuthResponseDTO> {
     try {
       const deleteUser = this.userReposiroty.delete({ email });
-      if (!deleteUser) return { status: 'error', message: 'User not found' };
-      return { status: 'success', message: 'User has been deleted' };
+      if (!deleteUser) return { status: 'Error', message: 'User not found' };
+      return { status: 'Success', message: 'User has been deleted' };
     } catch (error) {
       console.log(error);
     }
