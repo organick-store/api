@@ -65,7 +65,8 @@ const products = [
     type: 'health',
     price: 20,
     discount: 9,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-beans.png?alt=media&token=997564a0-6daa-4dd9-b5c5-a53d892bfc09',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-beans.png?alt=media&token=997564a0-6daa-4dd9-b5c5-a53d892bfc09',
     description:
       'Fresh and nutritious mung beans, perfect for adding to your favorite dishes.',
     additionalInfo:
@@ -79,7 +80,8 @@ const products = [
     type: 'vegetable',
     price: 17,
     discount: 0,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-cabbage.png?alt=media&token=dde6c8bc-c9ed-4f01-8e87-ff7854dafffe',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-cabbage.png?alt=media&token=dde6c8bc-c9ed-4f01-8e87-ff7854dafffe',
     description: 'Fresh and crispy green cabbage.',
     additionalInfo:
       'Cabbage is a rich source of vitamins C and K, as well as dietary fiber.',
@@ -92,7 +94,8 @@ const products = [
     type: 'vegetable',
     price: 20,
     discount: 7,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-broccoli.png?alt=media&token=74b8d883-6483-45e6-9c24-bb1009f8a7c4',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-broccoli.png?alt=media&token=74b8d883-6483-45e6-9c24-bb1009f8a7c4',
     description:
       'Our broccoli is grown in nutrient-rich soil and harvested at the peak of freshness.',
     additionalInfo:
@@ -106,7 +109,8 @@ const products = [
     type: 'vegetable',
     price: 20,
     discount: 6,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-cauliflower.jpg?alt=media&token=e970322a-66b1-47de-8cf5-63398c0a3c1e',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-cauliflower.jpg?alt=media&token=e970322a-66b1-47de-8cf5-63398c0a3c1e',
     description:
       'Fresh and crisp, our cauliflower is the perfect addition to your healthy meals.',
     additionalInfo:
@@ -120,7 +124,8 @@ const products = [
     type: 'fresh',
     price: 20,
     discount: 5,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-zelco-suji.png?alt=media&token=07e41d32-5a73-4549-a820-755525a943db',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-zelco-suji.png?alt=media&token=07e41d32-5a73-4549-a820-755525a943db',
     description:
       'Crunchy, sweet and flavorful tea-time snack made from semolina and cardamom.',
     additionalInfo:
@@ -134,7 +139,8 @@ const products = [
     type: 'vegetable',
     price: 18,
     discount: 6,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-zucchini.png?alt=media&token=6ff7ab4e-ccc9-40a2-ae09-3d97ec5cb1fe',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-zucchini.png?alt=media&token=6ff7ab4e-ccc9-40a2-ae09-3d97ec5cb1fe',
     description:
       'Zucchini is a type of summer squash that belongs to the same family as cucumbers and melons.',
     additionalInfo:
@@ -148,7 +154,8 @@ const products = [
     type: 'millets',
     price: 20,
     discount: 5,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-white-hazelnut.png?alt=media&token=9807ad1a-c48b-4a8c-8534-1c1ff9dd579e',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-white-hazelnut.png?alt=media&token=9807ad1a-c48b-4a8c-8534-1c1ff9dd579e',
     description:
       'Our millets are versatile and can be used in a variety of dishes such as porridge, salads, soups, and more.',
     additionalInfo:
@@ -162,7 +169,8 @@ const products = [
     type: 'fresh',
     price: 20,
     discount: 6,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-banana.png?alt=media&token=041be70b-72b5-4f08-94a7-43a579da80c0',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-banana.png?alt=media&token=041be70b-72b5-4f08-94a7-43a579da80c0',
     description:
       'Our organic bananas are naturally sweet and packed with nutrients. Each bite is a burst of tropical flavor that will leave you craving for more.',
     additionalInfo:
@@ -176,7 +184,8 @@ const products = [
     type: 'fresh',
     price: 20,
     discount: 3,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproduct-eggs.png?alt=media&token=cfa0c3e0-6ad6-474d-9cb4-e6a8b94e14d0',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproduct-eggs.png?alt=media&token=cfa0c3e0-6ad6-474d-9cb4-e6a8b94e14d0',
     description:
       'Eggs are a highly nutritious food that is rich in protein, vitamins, and minerals.',
     additionalInfo:
@@ -190,7 +199,8 @@ const products = [
     type: 'fresh',
     price: 20,
     discount: 6,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-banana.png?alt=media&token=041be70b-72b5-4f08-94a7-43a579da80c0',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-banana.png?alt=media&token=041be70b-72b5-4f08-94a7-43a579da80c0',
     description:
       'Our organic bananas are naturally sweet and packed with nutrients. Each bite is a burst of tropical flavor that will leave you craving for more.',
     additionalInfo:
@@ -204,7 +214,8 @@ const products = [
     type: 'vegetable',
     price: 17,
     discount: 0,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-onion.png?alt=media&token=cf1b0b46-0ae2-4458-82bf-e49b0c47a401',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-onion.png?alt=media&token=cf1b0b46-0ae2-4458-82bf-e49b0c47a401',
     description:
       'Fresh, high-quality onions with a pungent aroma and a distinctive taste',
     additionalInfo:
@@ -218,7 +229,8 @@ const products = [
     type: 'nuts',
     price: 17,
     discount: 7,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-pistachios.png?alt=media&token=e0e60a6c-ecde-4fdc-82ff-43f2cfe1b664',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-pistachios.png?alt=media&token=e0e60a6c-ecde-4fdc-82ff-43f2cfe1b664',
     description:
       'Our pistachios are carefully selected for their size, taste, and texture.',
     additionalInfo:
@@ -232,7 +244,8 @@ const products = [
     type: 'vegetable',
     price: 20,
     discount: 3,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-corn.png?alt=media&token=66ba17bb-0d92-437b-8155-1b4148d79361',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-corn.png?alt=media&token=66ba17bb-0d92-437b-8155-1b4148d79361',
     description:
       'Fresh, sweet and juicy, corn is a staple of many cuisines around the world.',
     additionalInfo:
@@ -246,7 +259,8 @@ const products = [
     type: 'nuts',
     price: 20,
     discount: 8,
-    image: 'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-brown-hazelnut.png?alt=media&token=3c8f8e2f-4a8b-4a9e-8883-cd5435b52fcf',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-brown-hazelnut.png?alt=media&token=3c8f8e2f-4a8b-4a9e-8883-cd5435b52fcf',
     description:
       'Our hazelnuts are carefully handpicked to ensure the highest quality.',
     additionalInfo:
@@ -273,25 +287,35 @@ export class ProductsSeed1685987672432 implements MigrationInterface {
         "overview" character varying NOT NULL,
         CONSTRAINT "PK_bebc9158e480b949565b4dc7a82" PRIMARY KEY ("id")
         )`);
-    
+
     for (const product of products) {
-        await queryRunner.query(
-          `
+      const {
+        name,
+        type,
+        price,
+        discount,
+        image,
+        description,
+        additionalInfo,
+        overview
+      } = product;
+      await queryRunner.query(
+        `
             INSERT INTO product
             ("name", "type", "price", "discount", "image", "description", "additionalInfo", "overview") 
             VALUES ($1, $2, $3 , $4, $5, $6, $7, $8)
           `,
-          [
-            product.name,
-            product.type,
-            product.price,
-            product.discount,
-            product.image,
-            product.description,
-            product.additionalInfo,
-            product.overview
-          ]
-        );
+        [
+          name,
+          type,
+          price,
+          discount,
+          image,
+          description,
+          additionalInfo,
+          overview
+        ]
+      );
     }
   }
 
