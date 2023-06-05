@@ -134,7 +134,7 @@ export class UserService {
   async refresh(token: string) {
     try {
       const isTokenValid = await verifyToken(token).catch((err) => !!!err);
-      if (!isTokenValid) return { status: 'Error', message: 'Token expired' };
+      if (!isTokenValid) return { status: 'Error', message: 'Token invalid' };
 
       const email = await decodeToken(token).then((payload) => payload.email);
       const user = await this.userReposiroty.findOneBy({ email });
