@@ -3,6 +3,7 @@ import { DataSource } from "typeorm"
 import { User } from "./entities/user.entity"
 import { TemporaryPassword } from "./entities/temporaryPasswords.entity"
 import { Product } from "./entities/product.entity"
+import { join } from "path"
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
@@ -14,6 +15,7 @@ export const AppDataSource = new DataSource({
     synchronize: true,
     logging: false,
     entities: [User, TemporaryPassword, Product],
-    migrations: [],
+    migrations: [join(__dirname, 'migrations/*.{ts,js}')],
+    migrationsRun: true,
     subscribers: []
   })
