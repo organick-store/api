@@ -37,8 +37,7 @@ export class EmailService {
 
   async sendConfirmationEmail({ to }: EmailOptionsData, token: string): Promise<AuthResponseDTO> {
     try {
-      const html = confirmationTemplate.replace('LINK', process.env.CONFIRM_EMAIL_URL);
-      console.log(html);
+      const html = confirmationTemplate.replace('LINK', process.env.CONFIRM_EMAIL_URL + token);
       await this.mailerService.sendMail({
         to,
         subject: 'Confirm your email',
