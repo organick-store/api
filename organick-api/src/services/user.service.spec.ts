@@ -65,4 +65,54 @@ describe('UserService', () => {
     });
   });
 
+  describe('signin', () => {
+    it('should signin user', async () => {
+      await service.signin('email', 'password');
+      expect(userReposiroty.findOneBy).toBeCalledTimes(1);
+    });
+  });
+
+  describe('resetPassword', () => {
+    it('should reset password', async () => {
+      await service.resetPassword('oldPassword', 'newPassword', 'token');
+      expect(userReposiroty.findOneBy).toBeCalledTimes(0);
+    });
+  });
+
+  describe('deleteUser', () => {
+    it('should delete user', async () => {
+      await service.deleteUser('email');
+      expect(userReposiroty.delete).toBeCalledTimes(1);
+    });
+  });
+
+  describe('getAllUsers', () => {
+    it('should get all users', async () => {
+      await service.getAllUsers();
+      expect(userReposiroty.find).toBeCalledTimes(1);
+    });
+  });
+
+
+  describe('sendTemporaryPassword', () => {
+    it('should send temporary password', async () => {
+      await service.setTemporaryPassword('email', '12345678');
+      expect(userReposiroty.findOneBy).toBeCalledTimes(1);
+    });
+  });
+
+  describe('confirmEmail', () => {
+    it('should confirm email', async () => {
+      const mail = await service.confirmEmail('token');
+      expect(mail.status).toBe('Error');
+    });
+  });
+
+
+  describe('refresh', () => {
+    it('should not refrech token', async () => {
+      const token = await service.refresh('token');
+      expect(token.status).toBe('Error');
+    });
+  });
 });
