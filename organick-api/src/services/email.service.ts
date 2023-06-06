@@ -8,6 +8,8 @@ import { temporaryPasswordTemplate } from '../templates/tamporaryPassword.templa
 import { confirmationTemplate } from '../templates/confirmation.template';
 import { AuthResponseDTO } from '../DTOs/authResponse.dto';
 import { User } from '../entities/user.entity';
+import { Order } from '../entities/order.entity';
+import { orderTemplate } from '../templates/order.template';
 
 @Injectable()
 export class EmailService {
@@ -45,6 +47,30 @@ export class EmailService {
       }).catch((err) => console.log(err));
 
       return { status: 'Success', message: `Email has been sent to: ${to}` };
+    } catch (error) {
+      console.log(error);
+      return { status: 'Error', message: error.message };
+    }
+  }
+
+  async sendOrderEmail(email: string, products: {quantity: number, name: string}[], orderId: number, address: string): Promise<AuthResponseDTO> {
+    try {
+      let productsMessage = '';
+      for (const product of products) {
+        productsMessage += `${product.quantity} of item ${product.name}\n`;
+      }
+
+      const html = orderTemplate
+        .replace('PRODUCTS', productsMessage)
+        .replace('DELIVERY_ADDRESS', address);
+
+      await this.mailerService.sendMail({
+        to: email,
+        subject: `Order ${orderId}`,
+        html
+      }).catch((err) => console.log(err));
+
+      return { status: 'Success', message: `Email has been sent to: ${email}` };
     } catch (error) {
       console.log(error);
       return { status: 'Error', message: error.message };

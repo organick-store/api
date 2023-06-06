@@ -34,9 +34,9 @@ export class OrderService {
       order.user = user;
       
       await this.orderRepository.save(order);
-
+      
       await this.addProductToOrder(order.id, products);
-
+      
       return { status: 'Success', message: 'Order created', order };
     } catch (error) {
       console.log(error);
