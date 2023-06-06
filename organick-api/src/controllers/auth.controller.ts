@@ -38,9 +38,9 @@ export class AuthController {
       const registration = await this.userService.register(
         name,
         email,
+        password,
         phone,
-        address,
-        password
+        address
       );
       if (!!registration.message) return await res.status(202).send(registration);
       else {  
