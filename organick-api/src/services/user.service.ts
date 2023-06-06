@@ -24,7 +24,9 @@ export class UserService {
   async register(
     name: string,
     email: string,
-    password: string
+    password: string,
+    phone: string,
+    address: string
   ): Promise<AuthResponseDTO> {
     const candidateEmail = await this.userReposiroty.findOneBy({ email });
     if (candidateEmail)
@@ -38,6 +40,8 @@ export class UserService {
     const user = new User();
     user.name = name;
     user.email = email;
+    user.phone = phone;
+    user.address = address;
     user.password = passwordHash;
 
     await this.userReposiroty.save(user);
