@@ -13,6 +13,8 @@ import { Product } from './entities/product.entity';
 import { ProductService } from './services/product.service';
 import { ProductController } from './controllers/product.controller';
 import { Order } from './entities/order.entity';
+import { OrderController } from './controllers/order.controller';
+import { OrderService } from './services/order.service';
 dotenv.config();
 
 @Module({
@@ -39,7 +41,7 @@ dotenv.config();
       }
     })
   ],
-  controllers: [AuthController, ProductController],
-  providers: [UserService, EmailService, ProductService]
+  controllers: [OrderController, AuthController, ProductController],
+  providers: [UserService, EmailService, ProductService, OrderService]
 })
 export class AppModule {}
