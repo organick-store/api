@@ -165,21 +165,6 @@ const products = [
   },
 
   {
-    name: 'Fresh Banana Fruites',
-    type: 'fresh',
-    price: 20,
-    discount: 6,
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-banana.png?alt=media&token=041be70b-72b5-4f08-94a7-43a579da80c0',
-    description:
-      'Our organic bananas are naturally sweet and packed with nutrients. Each bite is a burst of tropical flavor that will leave you craving for more.',
-    additionalInfo:
-      'Bananas are rich in potassium, fiber, and vitamins B6 and C. They are a great source of energy and can help regulate blood pressure and digestion.',
-    overview:
-      'Our bananas are grown using sustainable farming practices and are free from harmful pesticides and chemicals.'
-  },
-
-  {
     name: 'Eggs',
     type: 'fresh',
     price: 20,
@@ -192,21 +177,6 @@ const products = [
       'They are a versatile ingredient that can be cooked in various ways, including boiled, fried, and scrambled.',
     overview:
       'Eggs are also an essential ingredient in many baking recipes, adding moisture, structure, and flavor to baked goods.'
-  },
-
-  {
-    name: 'Fresh Banana Fruites',
-    type: 'fresh',
-    price: 20,
-    discount: 6,
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/organick-f1be5.appspot.com/o/images%2Fproducts-banana.png?alt=media&token=041be70b-72b5-4f08-94a7-43a579da80c0',
-    description:
-      'Our organic bananas are naturally sweet and packed with nutrients. Each bite is a burst of tropical flavor that will leave you craving for more.',
-    additionalInfo:
-      'Bananas are rich in potassium, fiber, and vitamins B6 and C. They are a great source of energy and can help regulate blood pressure and digestion.',
-    overview:
-      'Our bananas are grown using sustainable farming practices and are free from harmful pesticides and chemicals.'
   },
 
   {
