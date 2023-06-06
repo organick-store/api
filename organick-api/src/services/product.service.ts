@@ -14,6 +14,16 @@ export class ProductService {
     return await this.productRepository.find();
   }
 
+  async getProductByName(productName: string) {
+    try {
+      const product = await this.productRepository.findOneBy({ name: productName });
+      if (!product) return { status: 'Error', message: 'Product not found' };
+      return { status: 'Success', product };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async createProduct(productInfo: ProductDTO): Promise<Product> {
     try {
       const product = new Product();
