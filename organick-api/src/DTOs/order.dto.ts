@@ -31,5 +31,5 @@ export class OrderDTO {
     description: 'Order products',
     type: Array
   })
-  products: Array<string>;
+  products: Array<{name: string, quantity: number}>;
 }

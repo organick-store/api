@@ -5,17 +5,20 @@ import { Order } from "../entities/order.entity";
 import { decodeToken, verifyToken } from "../utils/token.util";
 import { User } from "../entities/user.entity";
 import { Product } from "../entities/product.entity";
+import { OrderProduct } from "../entities/orderProduct.entity";
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
-    @InjectRepository(User) private readonly userRepository: Repository<User>
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(OrderProduct) private readonly orderProductRepository: Repository<OrderProduct>,
+    @InjectRepository(Product) private readonly productRepository: Repository<Product>,
   ) {}
 
-  async createOrder(token: string, totalCost: number, totalDiscount: number, address: string, products: Product[]) {
+  async createOrder(token: string, totalCost: number, totalDiscount: number, address: string, products: {name: string, quantity: number}[]) {
     try {
-      const isTokenValid = await verifyToken(token).catch((err) => !!!err);
+      const isTokenValid = await verifyToken(token).catch(() => false);
       if (!isTokenValid) return { status: 'Error', message: 'Invalid token' };
 
       const email = await decodeToken(token).then((payload) => payload.email);
@@ -29,14 +32,27 @@ export class OrderService {
       order.totalCost = totalCost;
       order.totalDiscount = totalDiscount;
       order.user = user;
-      order.products = products;
-
+      
       await this.orderRepository.save(order);
 
+      await this.addProductToOrder(order.id, products);
 
-      return { status: 'Success', message: 'Order created' };
+      return { status: 'Success', message: 'Order created', order };
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async addProductToOrder(orderId: number, products: {name: string, quantity: number}[]) {
+    const order = await this.orderRepository.findOneBy({ id: orderId });
+    
+    for (const product of products) {
+      const orderedProduct = await this.productRepository.findOneBy({ name: product.name });
+      const orderProduct = new OrderProduct();
+      orderProduct.quantity = product.quantity;
+      orderProduct.product = orderedProduct;
+      orderProduct.order = order;
+      await this.orderProductRepository.save(orderProduct);
     }
   }
 }

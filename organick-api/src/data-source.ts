@@ -5,6 +5,7 @@ import { TemporaryPassword } from "./entities/temporaryPasswords.entity"
 import { Product } from "./entities/product.entity"
 import { join } from "path"
 import { Order } from "./entities/order.entity"
+import { OrderProduct } from "./entities/orderProduct.entity"
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DATABASE_NAME,
     synchronize: true,
     logging: false,
-    entities: [User, TemporaryPassword, Product, Order],
+    entities: [User, TemporaryPassword, Product, Order, OrderProduct],
     migrations: [join(__dirname, 'migrations/*.{ts,js}')],
     migrationsRun: true,
     subscribers: []
