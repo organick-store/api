@@ -27,7 +27,7 @@ export class UserService {
     password: string,
     phone: string,
     address: string
-  ) {
+  ): Promise<AuthResponseDTO> {
     const candidateEmail = await this.userReposiroty.findOneBy({ email });
     if (candidateEmail)
       return { status: 'Error', message: 'User already exists' };
@@ -67,7 +67,7 @@ export class UserService {
         expiresIn: process.env.JWT_EXPIRATION_TIME
       });
 
-      return { status: 'Success', token, name: user.name, email: user.email };
+      return { status: 'Success', token, name: user.name, email: user.email, address: user.address };
     } catch (error) {
       console.log(error);
     }
