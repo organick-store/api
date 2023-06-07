@@ -13,7 +13,7 @@ export class OrderProduct {
   @ManyToOne(() => Order, order => order.products, { cascade: true })
   order: Order;
   
-  @OneToOne(() => Product)
+  @ManyToOne(() => Product)
   @JoinColumn()
   product: Product;  
 }
