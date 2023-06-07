@@ -144,7 +144,7 @@ export class UserService {
       const user = await this.userReposiroty.findOneBy({ email });
       if (!user) return { status: 'Error', message: 'User not found' };
 
-      return { status: 'Success', name: user.name, email: user.email };
+      return { status: 'Success', name: user.name, email: user.email, address: user.address };
 
     } catch (error) {
       console.log(error);
