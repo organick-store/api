@@ -27,7 +27,7 @@ export class UserService {
     password: string,
     phone: string,
     address: string
-  ): Promise<AuthResponseDTO> {
+  ) {
     const candidateEmail = await this.userReposiroty.findOneBy({ email });
     if (candidateEmail)
       return { status: 'Error', message: 'User already exists' };
@@ -45,7 +45,7 @@ export class UserService {
     user.password = passwordHash;
 
     await this.userReposiroty.save(user);
-    return { status: 'Success', token, name: user.name, email: user.email };
+    return { status: 'Success', token, name: user.name, email: user.email, address: user.address };
   }
 
   async signin(email: string, password: string): Promise<AuthResponseDTO> {
