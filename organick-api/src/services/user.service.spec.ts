@@ -60,7 +60,7 @@ describe('UserService', () => {
 
   describe('register', () => {
     it('should register new user', async () => {
-      await service.register('username', 'user@email.com', 'password');
+      await service.register('username', 'user@email.com', 'password', '1234567890', 'address');
       expect(userReposiroty.save).toBeCalledTimes(1);
     });
   });

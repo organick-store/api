@@ -34,11 +34,13 @@ export class AuthController {
   @ApiBody({ type: UserDTO })
   async singup(@Body() body: UserDTO, @Response() res) {
     try {
-      const { name, email, password } = body;
+      const { name, email, password, phone, address } = body;
       const registration = await this.userService.register(
         name,
         email,
-        password
+        password,
+        phone,
+        address
       );
       if (!!registration.message) return await res.status(202).send(registration);
       else {  

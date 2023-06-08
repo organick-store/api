@@ -44,4 +44,13 @@ export class AuthResponseDTO {
     nullable: true
   })
   email?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'User address',
+    type: String,
+    nullable: true
+  })
+  address?: string;
 }

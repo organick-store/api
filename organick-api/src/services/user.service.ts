@@ -24,7 +24,9 @@ export class UserService {
   async register(
     name: string,
     email: string,
-    password: string
+    password: string,
+    phone: string,
+    address: string
   ): Promise<AuthResponseDTO> {
     const candidateEmail = await this.userReposiroty.findOneBy({ email });
     if (candidateEmail)
@@ -38,10 +40,12 @@ export class UserService {
     const user = new User();
     user.name = name;
     user.email = email;
+    user.phone = phone;
+    user.address = address;
     user.password = passwordHash;
 
     await this.userReposiroty.save(user);
-    return { status: 'Success', token, name: user.name, email: user.email };
+    return { status: 'Success', token, name: user.name, email: user.email, address: user.address };
   }
 
   async signin(email: string, password: string): Promise<AuthResponseDTO> {
@@ -63,7 +67,7 @@ export class UserService {
         expiresIn: process.env.JWT_EXPIRATION_TIME
       });
 
-      return { status: 'Success', token, name: user.name, email: user.email };
+      return { status: 'Success', token, name: user.name, email: user.email, address: user.address };
     } catch (error) {
       console.log(error);
     }
@@ -140,7 +144,7 @@ export class UserService {
       const user = await this.userReposiroty.findOneBy({ email });
       if (!user) return { status: 'Error', message: 'User not found' };
 
-      return { status: 'Success', name: user.name, email: user.email };
+      return { status: 'Success', name: user.name, email: user.email, address: user.address };
 
     } catch (error) {
       console.log(error);
