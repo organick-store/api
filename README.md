@@ -10,7 +10,8 @@ Nest.js RESTful API for Organick grocery store This is a website for Organick, a
 4. Create .env file and put there you data about DB, JWT-tokens and mail
 5. Set up your DB using setup/setup.sh script: ```sh setup.sh```
 >**Note** You have to have [pgAdmin](https://www.pgadmin.org/) and [PostgreSQL](https://www.postgresql.org/) installed on your machine
-6. After you set everything up, you can go to organick-api directory back and run ```npm run start``` to statt the server
+6. Now we need to fill products table, run ```npm run migration:run```
+7. After you set everything up, you can go to organick-api directory back and run ```npm run start``` to statt the server
 
 ## How to test
 
