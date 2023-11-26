@@ -1,9 +1,11 @@
-
 name: Node.js CI
 
 on:
   push:
-    branches: [ "auth" ]
+    branches:
+    - main
+    - dev
+    - refactor-tests
   pull_request:
     branches: [ "main", "dev" ]
 
