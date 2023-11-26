@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as crypto from 'crypto';
 
 import { Product } from '../entities/product.entity';
 import { ProductService } from '../services/product.service';
@@ -70,65 +71,207 @@ describe('ProductService', () => {
     });
   });
 
+  describe('getProductByName', () => {
+    it('should get product by name', async () => {
+      const randomProduct = generateRandomProduct();
+      const name = randomProduct.name;
+
+      jest.spyOn(productReposiroty, 'findOneBy').mockResolvedValue(randomProduct);
+
+      const result = await service.getProductByName(name);
+
+      expect(productReposiroty.findOneBy).toBeCalledTimes(1);
+      expect(productReposiroty.findOneBy).toBeCalledWith({ name });
+
+      expect(result).toEqual({ status: 'Success', product: randomProduct });
+    });
+
+    it('should throw product not found error', async () => {
+      const name = crypto.randomBytes(16).toString('hex');
+      const error = new Error('Product not found');
+
+      jest.spyOn(productReposiroty, 'findOneBy').mockResolvedValue(null);
+
+      const result = await service.getProductByName(name);
+
+      expect(productReposiroty.findOneBy).toBeCalledTimes(1);
+      expect(productReposiroty.findOneBy).toBeCalledWith({ name });
+
+      expect(result).toEqual({ status: 'Error', message: error.message });
+    });
+  });
+
   describe('createProduct', () => {
     it('should create product', async () => {
-      await service.createProduct({
-        name: 'name',
-        type: 'type',
-        price: 10,
-        discount: 10,
-        image: 'image',
-        description: 'description',
-        additionalInfo: 'additionalInfo',
-        overview: 'overview'
+      const { id, ...randomProduct } = generateRandomProduct();
+
+      jest.spyOn(productReposiroty, 'save').mockResolvedValue({ 
+        ...randomProduct,
+        id, 
       });
+
+      const result = await service.createProduct(randomProduct);
+
       expect(productReposiroty.save).toBeCalledTimes(1);
+      expect(productReposiroty.save).toBeCalledWith(randomProduct);
+
+      expect(result).toEqual({ id, ...randomProduct });
+    });
+
+    it('should throw internal repository error', async () => {
+      const { id, ...randomProduct } = generateRandomProduct();
+      const error = new Error('internal repository error');
+
+      jest.spyOn(productReposiroty, 'save').mockRejectedValue(error);
+
+      const result = await service.createProduct(randomProduct);
+
+      expect(productReposiroty.save).toBeCalledTimes(1);
+      expect(productReposiroty.save).toBeCalledWith(randomProduct);
+
+      expect(result).toBeUndefined();
     });
   });
 
   describe('updateProduct', () => {
     it('should update product', async () => {
-      await service.updateProduct({
-        name: 'name',
-        type: 'type',
-        price: 10,
-        discount: 10,
-        image: 'image',
-        description: 'description',
-        additionalInfo: 'additionalInfo',
-        overview: 'overview'
+      const { id, ...randomProduct } = generateRandomProduct();
+
+      jest.spyOn(productReposiroty, 'findOneBy').mockResolvedValue({ 
+        ...randomProduct,
+        id, 
       });
+
+      jest.spyOn(productReposiroty, 'update').mockResolvedValue({
+        raw: {},
+        affected: 1,
+        generatedMaps: [],
+      });
+
+      const result = await service.updateProduct(randomProduct);
+
+      expect(productReposiroty.findOneBy).toBeCalledTimes(1);
+      expect(productReposiroty.findOneBy).toBeCalledWith({ name: randomProduct.name });
+
+      expect(productReposiroty.update).toBeCalledTimes(1);
+      expect(productReposiroty.update).toBeCalledWith({ id, ...randomProduct }, randomProduct);
+
+      expect(result).toEqual({ 
+        status: 'Success', 
+        updated: {
+          raw: {},
+          affected: 1,
+          generatedMaps: [], 
+        } ,
+      });
+    });
+
+    it('should throw product not found error', async () => {
+      const { id, ...randomProduct } = generateRandomProduct();
+      const error = new Error('Product not found');
+
+      jest.spyOn(productReposiroty, 'findOneBy').mockResolvedValue(null);
+
+      const result = await service.updateProduct(randomProduct);
+
+      expect(productReposiroty.findOneBy).toBeCalledTimes(1);
+      expect(productReposiroty.findOneBy).toBeCalledWith({ name: randomProduct.name });
+
       expect(productReposiroty.update).toBeCalledTimes(0);
-    });
-  });
 
-  describe('updateProduct', () => {
-    it('should update product', async () => {
-      const product = await service.updateProduct({
-        name: 'name',
-        type: 'type',
-        price: 10,
-        discount: 10,
-        image: 'image',
-        description: 'description',
-        additionalInfo: 'additionalInfo',
-        overview: 'overview'
+      expect(result).toEqual({ status: 'Error', message: error.message });
+    });
+
+    it('should throw internal repository error', async () => {
+      const { id, ...randomProduct } = generateRandomProduct();
+      const error = new Error('internal repository error');
+
+      jest.spyOn(productReposiroty, 'findOneBy').mockResolvedValue({ 
+        ...randomProduct,
+        id, 
       });
-      expect(product).toMatchObject({ status: 'Error', message: 'Product not found' });
+
+      jest.spyOn(productReposiroty, 'update').mockRejectedValue(error);
+
+      const result = await service.updateProduct(randomProduct);
+
+      expect(productReposiroty.findOneBy).toBeCalledTimes(1);
+      expect(productReposiroty.findOneBy).toBeCalledWith({ name: randomProduct.name });
+
+      expect(productReposiroty.update).toBeCalledTimes(1);
+      expect(productReposiroty.update).toBeCalledWith({ id, ...randomProduct }, randomProduct);
+
+      expect(result).toBeUndefined();
     });
   });
 
   describe('deleteProduct', () => {
     it('should delete product', async () => {
-      await service.deleteProduct('name');
+      const { id, ...randomProduct } = generateRandomProduct();
+
+      jest.spyOn(productReposiroty, 'findOneBy').mockResolvedValue({ 
+        ...randomProduct,
+        id, 
+      });
+
+      jest.spyOn(productReposiroty, 'delete').mockResolvedValue({
+        raw: {},
+        affected: 1,
+      });
+
+      const result = await service.deleteProduct(randomProduct.name);
+
+      expect(productReposiroty.findOneBy).toBeCalledTimes(1);
+      expect(productReposiroty.findOneBy).toBeCalledWith({ name: randomProduct.name });
+
+      expect(productReposiroty.delete).toBeCalledTimes(1);
+      expect(productReposiroty.delete).toBeCalledWith({ id, ...randomProduct });
+
+      expect(result).toEqual({ 
+        status: 'Success', 
+        deleted: {
+          raw: {},
+          affected: 1,
+        } ,
+      });
+    });
+
+    it('should throw product not found error', async () => {
+      const name = crypto.randomBytes(16).toString('hex');
+      const error = new Error('Product not found');
+
+      jest.spyOn(productReposiroty, 'findOneBy').mockResolvedValue(null);
+
+      const result = await service.deleteProduct(name);
+
+      expect(productReposiroty.findOneBy).toBeCalledTimes(1);
+      expect(productReposiroty.findOneBy).toBeCalledWith({ name });
+
       expect(productReposiroty.delete).toBeCalledTimes(0);
-    });
-  });
 
-  describe('deleteProduct', () => {
-    it('should delete product', async () => {
-      const product = await service.deleteProduct('name');
-      expect(product).toMatchObject({ status: 'Error', message: 'Product not found' });
+      expect(result).toEqual({ status: 'Error', message: error.message });
+    });
+
+    it('should throw internal repository error', async () => {
+      const { id, ...randomProduct } = generateRandomProduct();
+      const error = new Error('internal repository error');
+
+      jest.spyOn(productReposiroty, 'findOneBy').mockResolvedValue({ 
+        ...randomProduct,
+        id, 
+      });
+
+      jest.spyOn(productReposiroty, 'delete').mockRejectedValue(error);
+
+      const result = await service.deleteProduct(randomProduct.name);
+
+      expect(productReposiroty.findOneBy).toBeCalledTimes(1);
+      expect(productReposiroty.findOneBy).toBeCalledWith({ name: randomProduct.name });
+
+      expect(productReposiroty.delete).toBeCalledTimes(1);
+      expect(productReposiroty.delete).toBeCalledWith({ id, ...randomProduct });
+    
+      expect(result).toBeUndefined();
     });
   });
 });
