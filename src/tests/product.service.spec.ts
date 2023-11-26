@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
+
 import { Product } from '../entities/product.entity';
-import { ProductService } from './product.service';
+import { ProductService } from '../services/product.service';
+import { generateRandomProduct } from './utils/generate-random-product.util';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -18,33 +19,54 @@ describe('ProductService', () => {
         {
           provide: PRODUCT_REPO_TOKEN,
           useValue: {
-            findOneBy: jest.fn(),
-            update: jest.fn(),
             save: jest.fn(),
             find: jest.fn(),
-            delete: jest.fn()
+            delete: jest.fn(),
+            update: jest.fn(),
+            findOneBy: jest.fn(),
           }
         }
       ]
     }).compile();
 
-    service = moduleRef.get<ProductService>(ProductService);
     productReposiroty = moduleRef.get(PRODUCT_REPO_TOKEN);
-
+    service = moduleRef.get<ProductService>(ProductService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
-  });
-
-  it('productReposiroty should be defined', () => {
     expect(productReposiroty).toBeDefined();
   });
 
   describe('getAllProducts', () => {
     it('should get all products', async () => {
-      await service.getAllProducts();
+      const randomProducts = [
+        generateRandomProduct(),
+        generateRandomProduct(),
+        generateRandomProduct(),
+      ];
+
+      jest.spyOn(productReposiroty, 'find').mockResolvedValue(randomProducts);
+
+      const result = await service.getAllProducts();
+
       expect(productReposiroty.find).toBeCalledTimes(1);
+      expect(productReposiroty.find).toBeCalledWith();
+
+      expect(result).toBe(randomProducts);
+    });
+
+    it('should throw internal repository error', async () => {
+      const error = new Error('internal repository error');
+
+      jest.spyOn(productReposiroty, 'find').mockRejectedValue(error);
+
+      await expect(
+        service.getAllProducts()
+      ).rejects.toThrow(error);
+
+      expect(productReposiroty.find).toBeCalledTimes(1);
+      expect(productReposiroty.find).toBeCalledWith();
     });
   });
 
