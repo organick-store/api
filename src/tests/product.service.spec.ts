@@ -104,6 +104,8 @@ describe('ProductService', () => {
     it('should create product', async () => {
       const { id, ...randomProduct } = generateRandomProduct();
 
+      delete randomProduct.quantity;
+
       jest.spyOn(productReposiroty, 'save').mockResolvedValue({
         ...randomProduct,
         id
@@ -120,6 +122,8 @@ describe('ProductService', () => {
     it('should throw internal repository error', async () => {
       const { id, ...randomProduct } = generateRandomProduct();
       const error = new Error('internal repository error');
+
+      delete randomProduct.quantity;
 
       jest.spyOn(productReposiroty, 'save').mockRejectedValue(error);
 
