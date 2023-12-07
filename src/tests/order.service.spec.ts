@@ -6,7 +6,6 @@ import { User } from '../entities/user.entity';
 import { Order } from '../entities/order.entity';
 import { Product } from '../entities/product.entity';
 import { OrderService } from '../services/order.service';
-import { ProductService } from '../services/product.service';
 import { OrderProduct } from '../entities/orderProduct.entity';
 import { generateRandomUser } from './utils/generate-random-user.util';
 import { generateRandomProduct } from './utils/generate-random-product.util';
@@ -81,19 +80,19 @@ describe('OrderService', () => {
       const products = [
         {
           quantity: 1,
-          name: crypto.randomBytes(4).toString('hex'),
+          name: crypto.randomBytes(4).toString('hex')
         },
         {
           quantity: 2,
-          name: crypto.randomBytes(4).toString('hex'),
-        },
+          name: crypto.randomBytes(4).toString('hex')
+        }
       ];
 
       const tokenUtils = require('../utils/token.util');
 
       jest.spyOn(tokenUtils, 'verifyToken').mockResolvedValue(true);
       jest.spyOn(tokenUtils, 'decodeToken').mockResolvedValue({
-        email: randomUser.email,
+        email: randomUser.email
       });
       jest
         .spyOn(userReposiroty, 'findOneBy')
@@ -105,7 +104,7 @@ describe('OrderService', () => {
         totalDiscount,
         user: randomUser as User,
         orderDate: expect.any(Date),
-        id: crypto.randomInt(1, 100),
+        id: crypto.randomInt(1, 100)
       });
       jest.spyOn(service, 'addProductToOrder').mockResolvedValue(undefined);
 
@@ -125,7 +124,7 @@ describe('OrderService', () => {
 
       expect(userReposiroty.findOneBy).toBeCalledTimes(1);
       expect(userReposiroty.findOneBy).toBeCalledWith({
-        email: randomUser.email,
+        email: randomUser.email
       });
 
       expect(orderReposiroty.save).toBeCalledTimes(1);
@@ -134,14 +133,11 @@ describe('OrderService', () => {
         totalCost,
         totalDiscount,
         user: randomUser,
-        orderDate: expect.any(Date),
+        orderDate: expect.any(Date)
       });
 
       expect(service.addProductToOrder).toBeCalledTimes(1);
-      expect(service.addProductToOrder).toBeCalledWith(
-        undefined,
-        products
-      );
+      expect(service.addProductToOrder).toBeCalledWith(undefined, products);
 
       expect(order).toEqual({
         status: 'Success',
@@ -151,7 +147,7 @@ describe('OrderService', () => {
           totalCost,
           totalDiscount,
           user: randomUser,
-          orderDate: expect.any(Date),
+          orderDate: expect.any(Date)
         }
       });
     });
@@ -164,18 +160,18 @@ describe('OrderService', () => {
       const products = [
         {
           quantity: 1,
-          name: crypto.randomBytes(4).toString('hex'),
+          name: crypto.randomBytes(4).toString('hex')
         },
         {
           quantity: 2,
-          name: crypto.randomBytes(4).toString('hex'),
-        },
+          name: crypto.randomBytes(4).toString('hex')
+        }
       ];
 
       const tokenUtils = require('../utils/token.util');
 
       jest.spyOn(tokenUtils, 'verifyToken').mockResolvedValue(false);
-      jest.spyOn(service, 'addProductToOrder')
+      jest.spyOn(service, 'addProductToOrder');
 
       const order = await service.createOrder(
         token,
@@ -198,7 +194,7 @@ describe('OrderService', () => {
 
       expect(order).toEqual({
         status: 'Error',
-        message: 'Invalid token',
+        message: 'Invalid token'
       });
     });
 
@@ -212,22 +208,22 @@ describe('OrderService', () => {
       const products = [
         {
           quantity: 1,
-          name: crypto.randomBytes(4).toString('hex'),
+          name: crypto.randomBytes(4).toString('hex')
         },
         {
           quantity: 2,
-          name: crypto.randomBytes(4).toString('hex'),
-        },
+          name: crypto.randomBytes(4).toString('hex')
+        }
       ];
 
       const tokenUtils = require('../utils/token.util');
 
       jest.spyOn(tokenUtils, 'verifyToken').mockResolvedValue(true);
       jest.spyOn(tokenUtils, 'decodeToken').mockResolvedValue({
-        email: randomUser.email,
+        email: randomUser.email
       });
       jest.spyOn(userReposiroty, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(service, 'addProductToOrder')
+      jest.spyOn(service, 'addProductToOrder');
 
       const order = await service.createOrder(
         token,
@@ -245,7 +241,7 @@ describe('OrderService', () => {
 
       expect(userReposiroty.findOneBy).toBeCalledTimes(1);
       expect(userReposiroty.findOneBy).toBeCalledWith({
-        email: randomUser.email,
+        email: randomUser.email
       });
 
       expect(orderReposiroty.save).toBeCalledTimes(0);
@@ -254,7 +250,7 @@ describe('OrderService', () => {
 
       expect(order).toEqual({
         status: 'Error',
-        message: 'User not found',
+        message: 'User not found'
       });
     });
   });
@@ -262,18 +258,24 @@ describe('OrderService', () => {
   describe('addProductToOrder', () => {
     it('should add product to order', async () => {
       const randomOrder = {
-        id: crypto.randomInt(1, 100),
+        id: crypto.randomInt(1, 100)
       };
       const randomProduct = generateRandomProduct();
       const randomOrderProduct = {
         quantity: crypto.randomInt(1, 100),
         product: [randomProduct as Product],
-        order: randomOrder,
+        order: randomOrder
       };
 
-      jest.spyOn(orderReposiroty, 'findOneBy').mockResolvedValue(randomOrder as Order);
-      jest.spyOn(productReposiroty, 'findOneBy').mockResolvedValue(randomProduct);
-      jest.spyOn(orderProductReposiroty, 'save').mockResolvedValue(expect.any(OrderProduct));
+      jest
+        .spyOn(orderReposiroty, 'findOneBy')
+        .mockResolvedValue(randomOrder as Order);
+      jest
+        .spyOn(productReposiroty, 'findOneBy')
+        .mockResolvedValue(randomProduct);
+      jest
+        .spyOn(orderProductReposiroty, 'save')
+        .mockResolvedValue(expect.any(OrderProduct));
 
       await service.addProductToOrder(randomOrder.id, [randomProduct]);
 
@@ -281,7 +283,9 @@ describe('OrderService', () => {
       expect(orderReposiroty.findOneBy).toBeCalledWith({ id: randomOrder.id });
 
       expect(productReposiroty.findOneBy).toBeCalledTimes(1);
-      expect(productReposiroty.findOneBy).toBeCalledWith({ name: randomProduct.name });
+      expect(productReposiroty.findOneBy).toBeCalledWith({
+        name: randomProduct.name
+      });
 
       expect(orderProductReposiroty.save).toBeCalledTimes(1);
     });
