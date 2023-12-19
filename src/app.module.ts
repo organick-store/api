@@ -16,18 +16,20 @@ import { Order } from './entities/order.entity';
 import { OrderController } from './controllers/order.controller';
 import { OrderService } from './services/order.service';
 import { OrderProduct } from './entities/orderProduct.entity';
+import { join } from 'path';
 dotenv.config();
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
+      migrationsRun: true,
       host: process.env.DATABASE_HOST,
       port: +process.env.DATABASE_PORT,
+      database: process.env.DATABASE_NAME,    
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
-      synchronize: true,
+      migrations: [join(__dirname, '../db/migrations/*.{ts,js}')],
       entities: [User, TemporaryPassword, Product, Order, OrderProduct]
     }), 
     TypeOrmModule.forFeature([User, TemporaryPassword, Product, Order, OrderProduct]),
