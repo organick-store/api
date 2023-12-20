@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser = require('cookie-parser');
-import { AppDataSource } from './data-source';
+import { AppDataSource } from '../data-source';
 
 async function bootstrap() {
   AppDataSource.initialize();
