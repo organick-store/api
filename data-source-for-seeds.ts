@@ -4,7 +4,6 @@ import { DataSource } from 'typeorm';
 config();
 
 export const DataSourceSeeds = new DataSource({
-  ssl: true,
   type: 'postgres',
   host: process.env.DATABASE_HOST,
   migrations: ['db/seeds/*{.ts,.js}'],
@@ -12,5 +11,6 @@ export const DataSourceSeeds = new DataSource({
   entities: ['src/**/*.entity{.ts,.js}'],
   password: process.env.DATABASE_PASSWORD,
   username: process.env.DATABASE_USERNAME,
-  port: Number(process.env.DATABASE_PORT)
+  port: Number(process.env.DATABASE_PORT),
+  ssl: process.env.NODE_ENV === 'production'
 });

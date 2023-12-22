@@ -22,7 +22,6 @@ dotenv.config();
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({ global: true, secret: process.env.JWT_SECRET }),
     TypeOrmModule.forRoot({
-      ssl: true,
       type: 'postgres',
       migrationsRun: true,
       host: process.env.DATABASE_HOST,
@@ -30,6 +29,7 @@ dotenv.config();
       database: process.env.DATABASE_NAME,
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
+      ssl: process.env.NODE_ENV === 'production',
       migrations: [join(__dirname, '../db/migrations/*.{ts,js}')],
       entities: [User, TemporaryPassword, Product, Order, OrderProduct]
     }),
