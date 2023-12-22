@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 
 export const generateRandomUser = () => {
   return {

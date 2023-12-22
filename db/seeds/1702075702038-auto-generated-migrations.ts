@@ -1,4 +1,4 @@
-import { Product } from '../../src/entities/product.entity';
+import { Product } from '../../src/product/entities/product.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class ProductSeed1702075702038 implements MigrationInterface {

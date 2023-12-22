@@ -1,26 +1,32 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 
-import { AuthController } from './controllers/auth.controller';
-import { UserService } from './services/user.service';
-import { User } from './entities/user.entity';
-import { EmailService } from './services/email.service';
+
+import { User } from './user/entities/user.entity';
+
 
 import * as dotenv from 'dotenv';
-import { TemporaryPassword } from './entities/temporaryPasswords.entity';
-import { Product } from './entities/product.entity';
-import { ProductService } from './services/product.service';
-import { ProductController } from './controllers/product.controller';
-import { Order } from './entities/order.entity';
-import { OrderController } from './controllers/order.controller';
-import { OrderService } from './services/order.service';
-import { OrderProduct } from './entities/orderProduct.entity';
+import { TemporaryPassword } from './user/entities/temporary-password.entity';
+import { Product } from './product/entities/product.entity';
+
+import { Order } from './order/enrtities/order.entity';
+
+import { OrderProduct } from './order/enrtities/order-product.entity';
 import { join } from 'path';
+import { AuthorizationModule } from './authorization/authorization.module';
+import { UserModule } from './user/user.module';
+import { MailModule } from './mail/mail.module';
+import { ProductModule } from './product/product.module';
+import { OrderModule } from './order/order.module';
+import { JwtModule } from '@nestjs/jwt';
 dotenv.config();
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.register({ global: true, secret: process.env.JWT_SECRET }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       migrationsRun: true,
@@ -32,7 +38,6 @@ dotenv.config();
       migrations: [join(__dirname, '../db/migrations/*.{ts,js}')],
       entities: [User, TemporaryPassword, Product, Order, OrderProduct]
     }), 
-    TypeOrmModule.forFeature([User, TemporaryPassword, Product, Order, OrderProduct]),
     MailerModule.forRoot({
       transport: {
         host: process.env.SMTP_HOST,
@@ -42,9 +47,13 @@ dotenv.config();
           pass: process.env.SMTP_PASSWORD
         }
       }
-    })
+    }),
+    AuthorizationModule,
+    UserModule,
+    MailModule,
+    OrderModule,
+    ProductModule,
+    OrderModule,
   ],
-  controllers: [OrderController, AuthController, ProductController],
-  providers: [UserService, EmailService, ProductService, OrderService]
 })
 export class AppModule {}
