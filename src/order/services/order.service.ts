@@ -9,23 +9,33 @@ import { IProductEntity } from 'src/product/interfaces/product-entity.interface'
 import { IInvoiceProduct } from 'src/mail/interfaces/invoice-product.interface';
 import { OrderProductService } from './product-order.service';
 import { IOrderProductEntity } from '../inrerfaces/order-product-entity.interface';
+import { UserService } from 'src/user/services/user.service';
+import { IOrderEntity } from '../inrerfaces/order-entity.interface';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly mailService: MailService,
+    private readonly userService: UserService,
     private readonly productService: ProductService,
     private readonly orderProductService: OrderProductService,
     @InjectRepository(Order) 
     private readonly orderRepository: Repository<Order>,
   ) {}
 
-  public async create(payload: ICreateOrder): Promise<Order> {
+  public async create(payload: ICreateOrder): Promise<IOrderEntity> {
+    const user = await this.userService.find({
+      where: {
+        email: payload.email,
+      }
+    });
+
     const order = this.orderRepository.create({
+      userId: user.id,          
       orderDate: new Date(),
       address: payload.address,
       totalCost: payload.totalCost,
-      totalDiscount: payload.totalDiscount,          
+      totalDiscount: payload.totalDiscount,
     });
 
     await this.orderRepository.save(order);
@@ -56,13 +66,13 @@ export class OrderService {
     }
     await Promise.all(orderProductPromises);
 
-    // await this.mailService.sendInvoice({
-    //   email: payload.email,
-    //   invoice: {
-    //     address: payload.address,
-    //     products: orderedProducts,
-    //   }
-    // })
+    await this.mailService.sendInvoice({
+      email: payload.email,
+      invoice: {
+        address: payload.address,
+        products: orderedProducts,
+      }
+    })
 
     return order;
   }

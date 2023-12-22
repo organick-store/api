@@ -2,7 +2,6 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ParserService } from './parser.service';
-import { IInvoice } from '../interfaces/invoice.interface';
 import { ISendInvoice } from '../interfaces/send-invoice.interface';
 
 @Injectable()
@@ -36,8 +35,6 @@ export class MailService {
 
   public async sendInvoice(payload: ISendInvoice): Promise<void> {
     const html = this.parserService.parseInvoice(payload.invoice);
-
-    console.log(html);
 
     await this.mailerService.sendMail({
       html,

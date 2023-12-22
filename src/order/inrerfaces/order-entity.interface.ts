@@ -8,4 +8,6 @@ export interface IOrderEntity {
   readonly totalCost: number;
 
   readonly totalDiscount: number;
+
+  readonly userId: number;
 }

@@ -18,8 +18,12 @@ export class Order {
 
   @Column()
   public readonly totalDiscount: number;
+
+  @Column()
+  public readonly userId: number;
   
   @ManyToOne(() => User, user => user.orders)
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   public user: User;
 
   @OneToMany(() => OrderProduct, orderProduct => orderProduct.order)
