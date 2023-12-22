@@ -7,15 +7,17 @@ import { IOrderProductEntity } from '../inrerfaces/order-product-entity.interfac
 @Injectable()
 export class OrderProductService {
   constructor(
-    @InjectRepository(OrderProduct) 
-    private readonly orderProductRepository: Repository<OrderProduct>,
+    @InjectRepository(OrderProduct)
+    private readonly orderProductRepository: Repository<OrderProduct>
   ) {}
 
-  public async create(payload: IOrderProductEntity): Promise<IOrderProductEntity> {
+  public async create(
+    payload: IOrderProductEntity
+  ): Promise<IOrderProductEntity> {
     const orderProduct = this.orderProductRepository.create({
       orderId: payload.orderId,
       quantity: payload.quantity,
-      productId: payload.productId,
+      productId: payload.productId
     });
 
     return this.orderProductRepository.save(orderProduct);

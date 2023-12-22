@@ -17,13 +17,13 @@ export class AuthorizationService {
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
     private readonly encryptionService: EncryptionService,
-    private readonly temporaryPasswordService: TemporaryPasswordService,
+    private readonly temporaryPasswordService: TemporaryPasswordService
   ) {}
 
   public async signup(payload: ISignUp): Promise<string> {
-    const user = await this.userService.find({ 
+    const user = await this.userService.find({
       where: {
-        email: payload.email,
+        email: payload.email
       }
     });
 
@@ -33,24 +33,27 @@ export class AuthorizationService {
 
     const hash = await this.encryptionService.hashPassword(payload.password);
 
-    const token = await this.jwtService.signAsync({email: payload.email}, {
-      expiresIn: this.configService.get('JWT_EXPIRATION_TIME'),
-    });
+    const token = await this.jwtService.signAsync(
+      { email: payload.email },
+      {
+        expiresIn: this.configService.get('JWT_EXPIRATION_TIME')
+      }
+    );
 
     await this.mailService.sendAccountConfirmation(payload.email, token);
 
     await this.userService.create({
       ...payload,
-      password: hash,
+      password: hash
     });
 
     return token;
   }
 
   public async signin(email: string, password: string): Promise<string> {
-    const user = await this.userService.find({ 
+    const user = await this.userService.find({
       where: {
-        email,
+        email
       }
     });
 
@@ -58,19 +61,25 @@ export class AuthorizationService {
       throw AuthorizationError.UserNotFound();
     }
 
-    const temporaryPassword = 
+    const temporaryPassword =
       await this.temporaryPasswordService.findWithRelationsByUserId(user.id);
 
     const passwordToCheck = temporaryPassword?.password || user.password;
 
-    const isPasswordCorrect = await this.encryptionService.comparePassword(password, passwordToCheck);
+    const isPasswordCorrect = await this.encryptionService.comparePassword(
+      password,
+      passwordToCheck
+    );
     if (!isPasswordCorrect) {
       throw AuthorizationError.WrongPassword();
     }
 
-    const token = await this.jwtService.signAsync({email}, {
-      expiresIn: this.configService.get('JWT_EXPIRATION_TIME'),
-    });
+    const token = await this.jwtService.signAsync(
+      { email },
+      {
+        expiresIn: this.configService.get('JWT_EXPIRATION_TIME')
+      }
+    );
 
     return token;
   }
@@ -78,9 +87,9 @@ export class AuthorizationService {
   public async confirmEmail(token: string): Promise<boolean> {
     const jwtPayload = await this.jwtService.verifyAsync(token);
 
-    const user = await this.userService.find({ 
+    const user = await this.userService.find({
       where: {
-        email: jwtPayload.email,
+        email: jwtPayload.email
       }
     });
 
@@ -89,21 +98,21 @@ export class AuthorizationService {
     }
 
     const confirmed = await this.userService.update({
-      where: {
-        email: jwtPayload.email,
-      },
       fields: {
-        isVerified: true,
+        isVerified: true
       },
+      where: {
+        email: jwtPayload.email
+      }
     });
 
     return confirmed;
   }
 
   public async recoverPassword(email: string): Promise<boolean> {
-    const user = await this.userService.find({ 
+    const user = await this.userService.find({
       where: {
-        email,
+        email
       }
     });
 
@@ -116,17 +125,17 @@ export class AuthorizationService {
 
     const password = crypto.randomBytes(4).toString('hex');
     const hashed = await this.encryptionService.hashPassword(password);
-  
+
     if (temporaryPassword) {
       const updated = await this.temporaryPasswordService.update({
         where: {
-          id: temporaryPassword.id,
+          id: temporaryPassword.id
         },
         fields: {
           password: hashed,
-          expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-        },
-      })
+          expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
+        }
+      });
 
       return updated;
     }
@@ -138,10 +147,13 @@ export class AuthorizationService {
     return true;
   }
 
-  public async resetPassword(email: string, password: string): Promise<boolean> {
-    const user = await this.userService.find({ 
+  public async resetPassword(
+    email: string,
+    password: string
+  ): Promise<boolean> {
+    const user = await this.userService.find({
       where: {
-        email,
+        email
       }
     });
 
@@ -160,11 +172,11 @@ export class AuthorizationService {
 
     const updated = await this.userService.update({
       where: {
-        email,
+        email
       },
       fields: {
-        password: hashed,
-      },
+        password: hashed
+      }
     });
 
     return updated;

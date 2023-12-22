@@ -9,27 +9,33 @@ export class MailService {
   constructor(
     private readonly configService: ConfigService,
     private readonly parserService: ParserService,
-    private readonly mailerService: MailerService,
+    private readonly mailerService: MailerService
   ) {}
 
-  public async sendAccountConfirmation(email: string, token: string): Promise<void> {
+  public async sendAccountConfirmation(
+    email: string,
+    token: string
+  ): Promise<void> {
     const link = this.configService.get<string>('CONFIRM_EMAIL_URL') + token;
     const html = this.parserService.parseConfirmation(link);
 
     await this.mailerService.sendMail({
       html,
       to: email,
-      subject: 'User confirmation',
+      subject: 'User confirmation'
     });
   }
 
-  public async sendTemporaryPassword(email: string, password: string): Promise<void> {
+  public async sendTemporaryPassword(
+    email: string,
+    password: string
+  ): Promise<void> {
     const html = this.parserService.parseTemporaryPassword(password);
 
     await this.mailerService.sendMail({
       html,
       to: email,
-      subject: 'Temporary password',
+      subject: 'Temporary password'
     });
   }
 
@@ -39,7 +45,7 @@ export class MailService {
     await this.mailerService.sendMail({
       html,
       to: payload.email,
-      subject: 'Invoice',
+      subject: 'Invoice'
     });
   }
 }

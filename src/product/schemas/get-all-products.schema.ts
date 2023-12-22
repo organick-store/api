@@ -1,11 +1,14 @@
-import { IsInt, Min } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, Min } from 'class-validator';
 
 export class GetAllProductsSchema {
   @IsInt()
   @Min(1)
-  public readonly limit: number;
+  @ApiProperty({ example: 10, required: false })
+  public readonly limit?: number;
 
   @IsInt()
   @Min(0)
-  public readonly offset: number;
+  @ApiProperty({ example: 2, required: false })
+  public readonly offset?: number;
 }

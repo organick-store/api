@@ -6,11 +6,8 @@ import { EncryptionService } from './services/encryption.service';
 import { MailModule } from 'src/mail/mail.module';
 
 @Module({
+  imports: [MailModule, UserModule],
   controllers: [AuthorizationController],
-  providers: [AuthorizationService, EncryptionService],
-  imports: [
-    MailModule,
-    UserModule,
-  ],
+  providers: [AuthorizationService, EncryptionService]
 })
 export class AuthorizationModule {}

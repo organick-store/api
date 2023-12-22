@@ -16,7 +16,7 @@ import { OrderProductService } from './services/product-order.service';
     TypeOrmModule.forFeature([Order, OrderProduct]),
     UserModule,
     MailModule,
-    ProductModule,
-  ],
+    ProductModule
+  ]
 })
 export class OrderModule {}

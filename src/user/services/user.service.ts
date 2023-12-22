@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
@@ -11,7 +11,7 @@ import { UserError } from '../user.error';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userReposiroty: Repository<User>,
+    @InjectRepository(User) private readonly userReposiroty: Repository<User>
   ) {}
 
   public async create(payload: ICreateUser): Promise<IUserEntity> {
@@ -27,7 +27,10 @@ export class UserService {
   }
 
   public async update(payload: IUpdateUser): Promise<boolean> {
-    const updated = await this.userReposiroty.update(payload.where, payload.fields);
+    const updated = await this.userReposiroty.update(
+      payload.where,
+      payload.fields
+    );
 
     if (updated.affected === 0) {
       throw UserError.UserNotUpdated();

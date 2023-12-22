@@ -27,16 +27,16 @@ dotenv.config();
       migrationsRun: true,
       host: process.env.DATABASE_HOST,
       port: +process.env.DATABASE_PORT,
-      database: process.env.DATABASE_NAME,    
+      database: process.env.DATABASE_NAME,
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       migrations: [join(__dirname, '../db/migrations/*.{ts,js}')],
       entities: [User, TemporaryPassword, Product, Order, OrderProduct]
-    }), 
+    }),
     MailerModule.forRoot({
       transport: {
-        host: process.env.SMTP_HOST,
         secure: false,
+        host: process.env.SMTP_HOST,
         auth: {
           user: process.env.SMTP_USERNAME,
           pass: process.env.SMTP_PASSWORD
@@ -48,7 +48,7 @@ dotenv.config();
     MailModule,
     OrderModule,
     ProductModule,
-    OrderModule,
-  ],
+    OrderModule
+  ]
 })
 export class AppModule {}

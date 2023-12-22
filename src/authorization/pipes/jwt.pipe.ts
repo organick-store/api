@@ -5,13 +5,11 @@ import { IJWTPipePayload } from '../interfaces/jwt-pipe-payload.interface';
 
 @Injectable()
 export class JWTPipe implements PipeTransform {
-  constructor(
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   public async transform(
     payload: IJWTPipePayload,
-    metadata: ArgumentMetadata,
+    metadata: ArgumentMetadata
   ): Promise<IJWTPayload> {
     const jwtPayload = await this.jwtService.verifyAsync(payload.jwt);
 

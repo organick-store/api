@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { MoreThanOrEqual, Repository } from 'typeorm';
 import { TemporaryPassword } from '../entities/temporary-password.entity';
 import { IUpdateTemporaryPassword } from '../interfaces/update-temporary-password.interface';
 import { UserError } from '../user.error';
@@ -9,43 +9,43 @@ import { UserError } from '../user.error';
 export class TemporaryPasswordService {
   constructor(
     @InjectRepository(TemporaryPassword)
-    private readonly temporaryPasswordRepository: Repository<TemporaryPassword>,
+    private readonly temporaryPasswordRepository: Repository<TemporaryPassword>
   ) {}
 
   public async create(
     userId: number,
-    password: string,
+    password: string
   ): Promise<TemporaryPassword> {
     const temporaryPassword = this.temporaryPasswordRepository.create({
       password,
-      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
       user: {
-        id: userId,
+        id: userId
       },
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
     });
 
     return this.temporaryPasswordRepository.save(temporaryPassword);
   }
 
-  public async findWithRelationsByUserId(userId: number): Promise<TemporaryPassword> {
-    const temporaryPassword =  await this.temporaryPasswordRepository.findOne({
+  public async findWithRelationsByUserId(
+    userId: number
+  ): Promise<TemporaryPassword> {
+    const temporaryPassword = await this.temporaryPasswordRepository.findOne({
       relations: {
-        user: true,
+        user: true
       },
       where: {
         expiresAt: MoreThanOrEqual(new Date()),
         user: {
-          id: userId,
-        },
+          id: userId
+        }
       }
     });
 
     return temporaryPassword;
   }
 
-  public async update(
-    payload: IUpdateTemporaryPassword,
-  ): Promise<boolean> {
+  public async update(payload: IUpdateTemporaryPassword): Promise<boolean> {
     const result = await this.temporaryPasswordRepository.update(
       payload.where,
       payload.fields
@@ -63,8 +63,8 @@ export class TemporaryPasswordService {
   public async deleteByUserId(userId: number): Promise<boolean> {
     const result = await this.temporaryPasswordRepository.delete({
       user: {
-        id: userId,
-      },
+        id: userId
+      }
     });
 
     const deleted = result.affected > 0;

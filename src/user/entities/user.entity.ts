@@ -24,6 +24,6 @@ export class User {
   @Column({ default: false, nullable: true })
   public readonly isVerified: boolean;
 
-  @OneToMany(() => Order, order => order.user)
-  public orders: Order[]
+  @OneToMany(() => Order, (order) => order.user)
+  public orders: Order[];
 }

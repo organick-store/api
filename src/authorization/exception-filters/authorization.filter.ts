@@ -7,7 +7,7 @@ export class AuthorizationFilter {
     const response = host.switchToHttp().getResponse<Response>();
 
     response.status(401).send({
-      error: exception.message,
+      error: exception.message
     });
   }
 }
