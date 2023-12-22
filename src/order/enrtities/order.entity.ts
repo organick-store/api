@@ -1,6 +1,13 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "../../user/entities/user.entity";
-import { OrderProduct } from "./order-product.entity";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm';
+import { User } from '../../user/entities/user.entity';
+import { OrderProduct } from './order-product.entity';
 
 @Entity()
 export class Order {
@@ -21,11 +28,11 @@ export class Order {
 
   @Column()
   public readonly userId: number;
-  
-  @ManyToOne(() => User, user => user.orders)
+
+  @ManyToOne(() => User, (user) => user.orders)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   public user: User;
 
-  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order)
+  @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.order)
   public products: OrderProduct[];
 }

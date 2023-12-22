@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { confirmationTemplate } from '../templates/confirmation.template';
-import { temporaryPasswordTemplate } from '../templates/temporary-password.template'
+import { temporaryPasswordTemplate } from '../templates/temporary-password.template';
 import { invoiceTemplate } from '../templates/invoice.template';
-import { IInvoiceProduct } from '../interfaces/invoice-product.interface';
 import { IInvoice } from '../interfaces/invoice.interface';
 
 @Injectable()

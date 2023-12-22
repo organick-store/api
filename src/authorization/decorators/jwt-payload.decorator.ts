@@ -7,9 +7,9 @@ export const GetAuthorizationHeader = createParamDecorator(
     const ctx = context.switchToHttp().getRequest();
 
     return {
-      jwt: ctx.headers.authorization.split(' ')[1],
+      jwt: ctx.headers.authorization.split(' ')[1]
     };
-  },
+  }
 );
 
 export const JWTPayload = (): ParameterDecorator =>

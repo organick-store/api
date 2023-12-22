@@ -5,14 +5,14 @@ import { UserService } from 'src/user/services/user.service';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate {
-  constructor (
+  constructor(
     private readonly jwtService: JwtService,
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const authorizationHeader =
-      context.switchToHttp().getRequest().headers.authorization;
+  public async canActivate(context: ExecutionContext): Promise<boolean> {
+    const authorizationHeader = context.switchToHttp().getRequest()
+      .headers.authorization;
 
     if (!authorizationHeader) {
       throw AuthorizationError.AuthorizationHeaderNotFound();
@@ -21,16 +21,16 @@ export class AuthorizationGuard implements CanActivate {
     const token = authorizationHeader.split(' ')[1];
 
     const payload = await this.jwtService.verifyAsync(token, {
-      secret: process.env.JWT_SECRET,
+      secret: process.env.JWT_SECRET
     });
-    
+
     if (!payload) {
       throw AuthorizationError.InvalidToken();
     }
 
     const user = await this.userService.find({
       where: {
-        email: payload.email,
+        email: payload.email
       }
     });
 

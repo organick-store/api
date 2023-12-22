@@ -6,10 +6,8 @@ import { TemporaryPasswordService } from './services/temporary-password.service'
 import { TemporaryPassword } from './entities/temporary-password.entity';
 
 @Module({
-  providers: [UserService, TemporaryPasswordService],
   exports: [UserService, TemporaryPasswordService],
-  imports: [
-    TypeOrmModule.forFeature([User, TemporaryPassword]),
-  ],
+  providers: [UserService, TemporaryPasswordService],
+  imports: [TypeOrmModule.forFeature([User, TemporaryPassword])]
 })
 export class UserModule {}

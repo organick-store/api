@@ -1,5 +1,4 @@
-export const invoiceTemplate = 
-`<!DOCTYPE html>
+export const invoiceTemplate = `<!DOCTYPE html>
 <html lang="en">
 <body>
   <h2>Your order</h2>
