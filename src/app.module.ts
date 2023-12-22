@@ -2,17 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
-
-
 import { User } from './user/entities/user.entity';
-
-
 import * as dotenv from 'dotenv';
 import { TemporaryPassword } from './user/entities/temporary-password.entity';
 import { Product } from './product/entities/product.entity';
-
 import { Order } from './order/enrtities/order.entity';
-
 import { OrderProduct } from './order/enrtities/order-product.entity';
 import { join } from 'path';
 import { AuthorizationModule } from './authorization/authorization.module';
@@ -28,6 +22,7 @@ dotenv.config();
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({ global: true, secret: process.env.JWT_SECRET }),
     TypeOrmModule.forRoot({
+      ssl: true,
       type: 'postgres',
       migrationsRun: true,
       host: process.env.DATABASE_HOST,
