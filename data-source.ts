@@ -5,6 +5,7 @@ config();
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
+  ssl: true,
   host: process.env.DATABASE_HOST,
   database: process.env.DATABASE_NAME,
   port: Number(process.env.DATABASE_PORT),

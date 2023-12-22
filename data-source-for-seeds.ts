@@ -5,6 +5,7 @@ config();
 
 export const DataSourceSeeds = new DataSource({
   type: 'postgres',
+  ssl: true,
   host: process.env.DATABASE_HOST,
   migrations: ['db/seeds/*{.ts,.js}'],
   database: process.env.DATABASE_NAME,
