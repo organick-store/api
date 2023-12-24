@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from 'src/order/enrtities/order.entity';
+import { Order } from '../../order/enrtities/order.entity';
 import { Repository } from 'typeorm';
 import { ICreateOrder } from '../inrerfaces/create-order.interface';
-import { MailService } from 'src/mail/services/mail.service';
-import { ProductService } from 'src/product/product.service';
-import { IProductEntity } from 'src/product/interfaces/product-entity.interface';
-import { IInvoiceProduct } from 'src/mail/interfaces/invoice-product.interface';
+import { MailService } from '../../mail/services/mail.service';
+import { ProductService } from '../../product/product.service';
+import { IProductEntity } from '../../product/interfaces/product-entity.interface';
+import { IInvoiceProduct } from '../../mail/interfaces/invoice-product.interface';
 import { OrderProductService } from './product-order.service';
 import { IOrderProductEntity } from '../inrerfaces/order-product-entity.interface';
-import { UserService } from 'src/user/services/user.service';
+import { UserService } from '../../user/services/user.service';
 import { IOrderEntity } from '../inrerfaces/order-entity.interface';
 
 @Injectable()

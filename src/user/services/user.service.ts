@@ -27,15 +27,17 @@ export class UserService {
   }
 
   public async update(payload: IUpdateUser): Promise<boolean> {
-    const updated = await this.userReposiroty.update(
+    const result = await this.userReposiroty.update(
       payload.where,
       payload.fields
     );
 
-    if (updated.affected === 0) {
+    const updated = result.affected > 0;
+
+    if (!updated) {
       throw UserError.UserNotUpdated();
     }
 
-    return true;
+    return updated;
   }
 }

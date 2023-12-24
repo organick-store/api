@@ -1,8 +1,10 @@
 import * as crypto from 'crypto';
-import { User } from 'src/user/entities/user.entity';
+import { IUserEntity } from '../../../user/interfaces/user-entity.interface';
 
-export const generateRandomUser = () => {
-  return {
+export const generateRandomUser = (
+  partial?: Partial<IUserEntity>
+): IUserEntity => {
+  const random: IUserEntity = {
     isVerified: false,
     id: crypto.randomInt(10),
     name: crypto.randomBytes(16).toString('hex'),
@@ -11,4 +13,8 @@ export const generateRandomUser = () => {
     address: crypto.randomBytes(16).toString('hex'),
     password: crypto.randomBytes(16).toString('hex')
   };
+
+  Object.assign(random, partial);
+
+  return random;
 };

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderProduct } from 'src/order/enrtities/order-product.entity';
+import { OrderProduct } from '../../order/enrtities/order-product.entity';
 import { Repository } from 'typeorm';
 import { IOrderProductEntity } from '../inrerfaces/order-product-entity.interface';
 
@@ -14,11 +14,7 @@ export class OrderProductService {
   public async create(
     payload: IOrderProductEntity
   ): Promise<IOrderProductEntity> {
-    const orderProduct = this.orderProductRepository.create({
-      orderId: payload.orderId,
-      quantity: payload.quantity,
-      productId: payload.productId
-    });
+    const orderProduct = this.orderProductRepository.create(payload);
 
     return this.orderProductRepository.save(orderProduct);
   }

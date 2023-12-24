@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
-import { UserService } from 'src/user/services/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../../user/services/user.service';
+import { ConfigService } from '@nestjs/config';
 import { ISignUp } from '../interfaces/sign-up.interface';
 import { EncryptionService } from './encryption.service';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import { AuthorizationError } from '../authorization.error';
-import { MailService } from 'src/mail/services/mail.service';
-import { TemporaryPasswordService } from 'src/user/services/temporary-password.service';
+import { MailService } from '../../mail/services/mail.service';
+import { TemporaryPasswordService } from '../../user/services/temporary-password.service';
 
 @Injectable()
 export class AuthorizationService {
