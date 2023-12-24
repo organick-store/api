@@ -16,10 +16,10 @@ export class User {
   public readonly password: string;
 
   @Column({ nullable: true })
-  public readonly phone: string;
+  public readonly phone?: string;
 
   @Column({ nullable: true })
-  public readonly address: string;
+  public readonly address?: string;
 
   @Column({ default: false, nullable: true })
   public readonly isVerified: boolean;
