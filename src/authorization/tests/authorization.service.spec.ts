@@ -550,4 +550,41 @@ describe('AuthorizationService', () => {
       expect(userService.update).toBeCalledTimes(0);
     });
   });
+
+  describe('getCurrentUser', () => {
+    it('should successfully get current user', async () => {
+      const email = crypto.randomBytes(4).toString('hex');
+      const user = generateRandomUser({ email });
+
+      jest.spyOn(userService, 'find').mockResolvedValue(user as User);
+
+      const result = await service.getCurrentUser(email);
+
+      expect(userService.find).toBeCalledTimes(1);
+      expect(userService.find).toBeCalledWith({
+        where: {
+          email
+        }
+      });
+
+      expect(result).toBe(user);
+    });
+
+    it('should throw error if user not found', async () => {
+      const email = crypto.randomBytes(4).toString('hex');
+
+      const error = AuthorizationError.UserNotFound();
+
+      jest.spyOn(userService, 'find').mockResolvedValue(null);
+
+      await expect(service.getCurrentUser(email)).rejects.toThrow(error);
+
+      expect(userService.find).toBeCalledTimes(1);
+      expect(userService.find).toBeCalledWith({
+        where: {
+          email
+        }
+      });
+    });
+  });
 });
