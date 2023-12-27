@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Post,
   Put,
@@ -26,6 +27,7 @@ import {
 import { AuthorizationResponse } from './responses/authorization.response';
 import { ConfirmEmailResponse } from './responses/confirm-email.response';
 import { ForgotPasswordResponse } from './responses/forgot-password.response';
+import { UserEntityRespponse } from './responses/user-entity.response';
 
 @Controller('api/auth')
 @ApiTags('User authorization')
@@ -128,5 +130,22 @@ export class AuthorizationController {
     );
 
     res.send(new ForgotPasswordResponse(reset));
+  }
+
+  @Get('/current-user')
+  @UseGuards(AuthorizationGuard)
+  @ApiResponse({
+    status: 200,
+    type: UserEntityRespponse,
+    description: 'Current user'
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  public async currentUser(
+    @JWTPayload() jwtPayload: IJWTPayload,
+    @Res() res: Response
+  ): Promise<void> {
+    const user = await this.authorizationService.getCurrentUser(jwtPayload.sub);
+
+    res.send(new UserEntityRespponse(user));
   }
 }
