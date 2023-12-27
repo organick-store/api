@@ -8,6 +8,7 @@ import { EncryptionService } from './encryption.service';
 import { AuthorizationError } from '../authorization.error';
 import { MailService } from '../../mail/services/mail.service';
 import { TemporaryPasswordService } from '../../user/services/temporary-password.service';
+import { IUserEntity } from 'src/user/interfaces/user-entity.interface';
 
 @Injectable()
 export class AuthorizationService {
@@ -180,5 +181,19 @@ export class AuthorizationService {
     });
 
     return updated;
+  }
+
+  public async getCurrentUser(email: string): Promise<IUserEntity> {
+    const user = await this.userService.find({
+      where: {
+        email
+      }
+    });
+
+    if (!user) {
+      throw AuthorizationError.UserNotFound();
+    }
+
+    return user;
   }
 }
