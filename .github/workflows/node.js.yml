@@ -1,9 +1,11 @@
-
 name: Node.js CI
 
 on:
   push:
-    branches: [ "auth" ]
+    branches:
+    - main
+    - dev
+    - refactor-tests
   pull_request:
     branches: [ "main", "dev" ]
 
@@ -18,7 +20,6 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    - run: cd organick-api/
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -26,4 +27,4 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
-    - run: cd organick-api/ && npm test
+    - run: npm run test
