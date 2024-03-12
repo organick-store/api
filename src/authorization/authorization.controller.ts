@@ -6,7 +6,9 @@ import {
   Post,
   Put,
   Res,
-  UseGuards
+  UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor
 } from '@nestjs/common';
 import { AuthorizationService } from './services/authorization.service';
 import { SignUpSchema } from './schemas/sign-up.schema';
@@ -27,7 +29,7 @@ import {
 import { AuthorizationResponse } from './responses/authorization.response';
 import { ConfirmEmailResponse } from './responses/confirm-email.response';
 import { ForgotPasswordResponse } from './responses/forgot-password.response';
-import { UserEntityRespponse } from './responses/user-entity.response';
+import { UserEntityResponse } from './responses/user-entity.response';
 
 @Controller('api/auth')
 @ApiTags('User authorization')
@@ -134,18 +136,18 @@ export class AuthorizationController {
 
   @Get('/current-user')
   @UseGuards(AuthorizationGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiResponse({
     status: 200,
-    type: UserEntityRespponse,
+    type: UserEntityResponse,
     description: 'Current user'
   })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   public async currentUser(
-    @JWTPayload() jwtPayload: IJWTPayload,
-    @Res() res: Response
-  ): Promise<void> {
+    @JWTPayload() jwtPayload: IJWTPayload
+  ): Promise<UserEntityResponse> {
     const user = await this.authorizationService.getCurrentUser(jwtPayload.sub);
 
-    res.send(new UserEntityRespponse(user));
+    return new UserEntityResponse(user);
   }
 }
