@@ -24,7 +24,8 @@ describe('ProductService', () => {
             find: jest.fn(),
             delete: jest.fn(),
             update: jest.fn(),
-            findOne: jest.fn()
+            findOne: jest.fn(),
+            findAndCount: jest.fn()
           }
         }
       ]
@@ -49,12 +50,14 @@ describe('ProductService', () => {
         generateRandomProduct()
       ];
 
-      jest.spyOn(productReposiroty, 'find').mockResolvedValue(randomProducts);
+      jest
+        .spyOn(productReposiroty, 'findAndCount')
+        .mockResolvedValue([randomProducts, randomProducts.length]);
 
       const result = await service.findAndCountMany(limit, offset);
 
-      expect(productReposiroty.find).toBeCalledTimes(1);
-      expect(productReposiroty.find).toBeCalledWith({
+      expect(productReposiroty.findAndCount).toBeCalledTimes(1);
+      expect(productReposiroty.findAndCount).toBeCalledWith({
         take: limit,
         skip: offset
       });
@@ -71,12 +74,14 @@ describe('ProductService', () => {
         randomProducts.push(generateRandomProduct());
       }
 
-      jest.spyOn(productReposiroty, 'find').mockResolvedValue(randomProducts);
+      jest
+        .spyOn(productReposiroty, 'findAndCount')
+        .mockResolvedValue([randomProducts, randomProducts.length]);
 
       const result = await service.findAndCountMany();
 
-      expect(productReposiroty.find).toBeCalledTimes(1);
-      expect(productReposiroty.find).toBeCalledWith({
+      expect(productReposiroty.findAndCount).toBeCalledTimes(1);
+      expect(productReposiroty.findAndCount).toBeCalledWith({
         skip: 0,
         take: Number.MAX_SAFE_INTEGER
       });
