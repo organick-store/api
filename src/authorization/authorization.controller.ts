@@ -34,23 +34,6 @@ import { UserEntityRespponse } from './responses/user-entity.response';
 export class AuthorizationController {
   constructor(private readonly authorizationService: AuthorizationService) {}
 
-  @Get('current-user')
-  @UseGuards(AuthorizationGuard)
-  @ApiResponse({
-    status: 200,
-    type: UserEntityRespponse,
-    description: 'Current user'
-  })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
-  public async getCurrentUser(
-    @JWTPayload() jwtPayload: IJWTPayload,
-    @Res() res: Response
-  ): Promise<void> {
-    const user = await this.authorizationService.getCurrentUser(jwtPayload.sub);
-
-    res.send(new UserEntityRespponse(user));
-  }
-
   @Post('signup')
   @ApiCreatedResponse({
     status: 201,
@@ -65,6 +48,7 @@ export class AuthorizationController {
     @Res() res: Response
   ): Promise<void> {
     const token = await this.authorizationService.signup(schema);
+
     res.send(new AuthorizationResponse(token));
   }
 

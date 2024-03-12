@@ -12,7 +12,7 @@ async function bootstrap(): Promise<void> {
   app.use(cookieParser());
   app.enableCors({
     credentials: true,
-    origin: ['http://localhost:3000', 'https://localhost:3000']
+    origin: 'http://localhost:3000'
   });
 
   app.useGlobalFilters(new AuthorizationFilter());
