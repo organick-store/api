@@ -16,14 +16,14 @@ export class ProductService {
     limit?: number,
     offset?: number
   ): Promise<ICountedProducts> {
-    const products = await this.productRepository.find({
+    const [products, count] = await this.productRepository.findAndCount({
       skip: offset || 0,
       take: limit || Number.MAX_SAFE_INTEGER
     });
 
     return {
-      products,
-      count: products.length
+      count,
+      products
     };
   }
 
