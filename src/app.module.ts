@@ -15,9 +15,11 @@ import { MailModule } from './mail/mail.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AppController } from './app.controller';
 dotenv.config();
 
 @Module({
+  controllers: [AppController],
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({ global: true, secret: process.env.JWT_SECRET }),
